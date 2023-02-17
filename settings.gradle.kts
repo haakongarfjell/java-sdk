@@ -1,0 +1,2 @@
+rootProject.name = "vipps-java"
+
