@@ -1,4 +1,4 @@
-package no.vipps.Models;
+package no.vipps.model;
 
 
 import org.json.JSONObject;

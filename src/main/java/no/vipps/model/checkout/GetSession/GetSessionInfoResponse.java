@@ -1,4 +1,4 @@
-package no.vipps.Models.Checkout.GetSession;
+package no.vipps.model.checkout.GetSession;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,7 @@ import com.sun.istack.internal.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import no.vipps.Models.VippsResponse;
+import no.vipps.model.VippsResponse;
 
 
 

@@ -1,4 +1,4 @@
-package no.vipps;
+package no.vipps.net;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.http.HttpEntity;
