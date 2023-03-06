@@ -2,17 +2,20 @@ package no.vipps.services;
 
 import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsServices;
-import no.vipps.model.epayment.cancelpayment.CancelPaymentResponse;
+import no.vipps.model.epayment.ModificationResponse;
 import no.vipps.model.epayment.capturepayment.CapturePaymentRequest;
-import no.vipps.model.epayment.capturepayment.CapturePaymentResponse;
 import no.vipps.model.epayment.createpayment.CreatePaymentRequest;
 import no.vipps.model.epayment.createpayment.CreatePaymentResponse;
 import no.vipps.model.epayment.forceapprove.ForceApproveRequest;
 import no.vipps.model.epayment.getpayment.GetPaymentResponse;
 import no.vipps.model.epayment.getpaymenteventlog.GetPaymentEventLog;
-import no.vipps.model.epayment.refundpayment.RefundPaymentResponse;
+import no.vipps.model.epayment.refundpayment.RefundPaymentRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EpaymentService {
+  private static Logger logger = LoggerFactory.getLogger(EpaymentService.class);
+
   public static CreatePaymentResponse createPayment(CreatePaymentRequest createPaymentRequest) {
     return VippsServices.getEpaymentServiceClient()
         .executeRequest(getRequestPath(), "POST", createPaymentRequest,
@@ -29,26 +32,30 @@ public class EpaymentService {
         .executeRequest(getRequestPath(reference, "events"), "GET", Iterable.class);
   }
 
-  public static CancelPaymentResponse cancelPayment(String reference) {
+  public static ModificationResponse cancelPayment(String reference) {
     return VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath(reference, "cancel"), "POST", CancelPaymentResponse.class);
+        .executeRequest(getRequestPath(reference, "cancel"), "POST", ModificationResponse.class);
   }
 
-  public static CapturePaymentResponse capturePayment(CapturePaymentRequest capturePaymentRequest) {
+  public static ModificationResponse capturePayment(String reference,
+                                                    CapturePaymentRequest capturePaymentRequest) {
     return VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath("", "capture"), "POST", capturePaymentRequest,
-            CapturePaymentResponse.class);
+        .executeRequest(getRequestPath(reference, "capture"), "POST", capturePaymentRequest,
+            ModificationResponse.class);
   }
 
-  public static RefundPaymentResponse refundPayment(String reference) {
+  public static ModificationResponse refundPayment(String reference,
+                                                   RefundPaymentRequest refundPaymentRequest) {
     return VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath(reference, "refund"), "POST", RefundPaymentResponse.class);
+        .executeRequest(getRequestPath(reference, "refund"), "POST", refundPaymentRequest,
+            ModificationResponse.class);
   }
 
   public static void forceApprovePayment(String reference,
                                          ForceApproveRequest forceApproveRequest) {
-    VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath(reference, "approve"), "POST", forceApproveRequest, null);
+    VippsServices.getEpaymentServiceClient().executeRequest(
+        (VippsConfiguration.getInstance().getBaseUrl() + "/epayment/v1/test/payments/" + reference +
+            "/approve"), "POST", forceApproveRequest, null);
   }
 
 
