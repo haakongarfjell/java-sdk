@@ -2,17 +2,25 @@ package no.vipps.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
-import org.json.JSONObject;
 
 @Jacksonized
 @Getter
+@Setter
 @ToString
 @SuperBuilder(toBuilder = true)
 public class VippsRequest {
+
   @JsonIgnore
-  public final JSONObject extraParameters;
+  private String extraParameters;
+
+  @JsonProperty("extraParameters")
+  public String getSerializedExtraParameters() {
+    return extraParameters;
+  }
 }
