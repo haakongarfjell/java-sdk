@@ -3,6 +3,7 @@ plugins {
     `java-library`
     checkstyle
     id("io.freefair.lombok") version "6.6.2"
+    id("com.jaredsburrows.license") version "0.9.0"
 }
 
 group = "org.vipps"
@@ -40,4 +41,11 @@ tasks.withType<Test> {
 
 checkstyle {
     toolVersion = "10.8.0"
+}
+
+licenseReport {
+    generateCsvReport = false
+    generateHtmlReport = true
+    generateJsonReport = false
+    generateTextReport = false
 }
