@@ -1,0 +1,14 @@
+{
+  "modelPackage": "no.vipps.model.checkout",
+  "bigDecimalAsString": false,
+  "hideGenerationTimestamp": true,
+  "withXml": false,
+  "serializableModel": false,
+  "dateLibrary": "java8-localdatetime",
+  "java8": true,
+  "fullJavaUtil": false,
+  "useRuntimeException": true,
+  "useLombok": true,
+  "serializationLibrary": "jackson",
+  "additionalModelTypeAnnotations": "@lombok.Builder(toBuilder=true) @lombok.EqualsAndHashCode @lombok.Getter @lombok.ToString"
+}
