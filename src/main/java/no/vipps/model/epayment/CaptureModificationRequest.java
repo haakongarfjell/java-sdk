@@ -32,8 +32,6 @@ import lombok.extern.jackson.Jacksonized;
 public class CaptureModificationRequest {
   /** */
   private Amount modificationAmount;
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
+
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

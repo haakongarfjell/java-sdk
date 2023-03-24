@@ -35,8 +35,6 @@ public class ProfileRequest {
    * Connect specification.
    */
   private String scope;
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
+
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

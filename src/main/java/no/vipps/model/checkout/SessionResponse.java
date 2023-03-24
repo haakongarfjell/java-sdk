@@ -61,8 +61,6 @@ public class SessionResponse {
   private SessionResponseBillingDetails billingDetails;
   /** */
   private Boolean customConsentProvided;
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
+
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

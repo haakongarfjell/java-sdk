@@ -1,6 +1,5 @@
 package no.vipps.infrastructure;
 
-import java.util.Objects;
 import no.vipps.exceptions.VippsUserException;
 
 public class VippsConfiguration {
@@ -26,9 +25,7 @@ public class VippsConfiguration {
   }
 
   public void configureVipps(
-      VippsConfigurationOptions vippsConfigurationOptions,
-      VippsHttpClient vippsHttpClient
-  ) {
+      VippsConfigurationOptions vippsConfigurationOptions, VippsHttpClient vippsHttpClient) {
     if (vippsConfigurationOptions == null) {
       throw new VippsUserException("vippsConfigurationOptions must not be null");
     }
@@ -47,8 +44,10 @@ public class VippsConfiguration {
   }
 
   private RuntimeException createMissingConfigException(String propertyName) {
-    return new VippsUserException("VippsConfiguration incomplete - " + propertyName +
-        " is missing. Have you run configureVipps?");
+    return new VippsUserException(
+        "VippsConfiguration incomplete - "
+            + propertyName
+            + " is missing. Have you run configureVipps?");
   }
 
   public String getPluginName() {

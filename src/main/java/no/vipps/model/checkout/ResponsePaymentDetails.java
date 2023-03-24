@@ -40,8 +40,6 @@ public class ResponsePaymentDetails {
   private PaymentState state;
   /** */
   private ResponsePaymentDetailsAggregate aggregate;
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
+
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

@@ -9,16 +9,19 @@ import org.junit.jupiter.api.Test;
 public class VippsConfigurationTests {
   @Test
   public void usingVippsConfigurationWithoutRunningConfigureThrowsException() throws Exception {
-    Assertions.assertThrows(VippsUserException.class, () -> {
-      AccessTokenService.getAccessToken().getToken();
-    });
+    Assertions.assertThrows(
+        VippsUserException.class,
+        () -> {
+          AccessTokenService.getAccessToken().getToken();
+        });
   }
 
   @Test
   public void usingVippsConfigurationWithInvalidThrowsException() {
-    Assertions.assertThrows(VippsUserException.class, () -> {
-      VippsConfiguration.getInstance().configureVipps(null, null);
-    });
+    Assertions.assertThrows(
+        VippsUserException.class,
+        () -> {
+          VippsConfiguration.getInstance().configureVipps(null, null);
+        });
   }
-
 }

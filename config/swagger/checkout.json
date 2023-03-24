@@ -11,6 +11,5 @@
   "templateDir": "custom-templates",
   "templateParams": {
     "removeEnumSuffix": true
-  },
-  "enumNameSuffix": "a"
+  }
 }

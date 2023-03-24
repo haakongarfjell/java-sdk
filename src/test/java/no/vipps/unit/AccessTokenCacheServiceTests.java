@@ -16,7 +16,6 @@ import no.vipps.model.accesstoken.AccessToken;
 import no.vipps.services.AccessTokenCacheService;
 import org.junit.jupiter.api.Test;
 
-
 public class AccessTokenCacheServiceTests {
   @Test
   public void canRetrieveSavedValid() {
@@ -32,7 +31,8 @@ public class AccessTokenCacheServiceTests {
   public void canNotRetrieveSavedExpired() {
     String key = UUID.randomUUID().toString();
     AccessToken accessToken =
-        getToken(getInstantSubtract(2, ChronoUnit.HOURS).atOffset(ZoneOffset.UTC).toInstant(),
+        getToken(
+            getInstantSubtract(2, ChronoUnit.HOURS).atOffset(ZoneOffset.UTC).toInstant(),
             getInstantAdd(1, ChronoUnit.HOURS).atOffset(ZoneOffset.UTC).toInstant());
     AccessTokenCacheService.put(key, accessToken);
     AccessToken res = AccessTokenCacheService.get(key);
@@ -52,18 +52,33 @@ public class AccessTokenCacheServiceTests {
   private Instant getInstantAdd(int amountToAdd, ChronoUnit unit) {
     return Instant.now().plus(amountToAdd, unit).atOffset(ZoneOffset.UTC).toInstant();
   }
+
   private Instant getInstantSubtract(int amountToSubtract, ChronoUnit unit) {
     return Instant.now().minus(amountToSubtract, unit).atOffset(ZoneOffset.UTC).toInstant();
   }
 
   private AccessToken getToken(Instant notBefore, Instant expiresAt) {
-    JwtBuilder jwtBuilder = Jwts.builder().setIssuer("TestIssuer").setAudience("TestAudience")
-        .setNotBefore(Date.from(notBefore)).setExpiration(Date.from(expiresAt))
-        .setIssuedAt(Date.from(notBefore)).signWith(new SecretKeySpec(new byte[36],
-            SignatureAlgorithm.HS512.getJcaName())); // 18 =  AES256_CTS_HMAC_SHA1_96
+    JwtBuilder jwtBuilder =
+        Jwts.builder()
+            .setIssuer("TestIssuer")
+            .setAudience("TestAudience")
+            .setNotBefore(Date.from(notBefore))
+            .setExpiration(Date.from(expiresAt))
+            .setIssuedAt(Date.from(notBefore))
+            .signWith(
+                new SecretKeySpec(
+                    new byte[36],
+                    SignatureAlgorithm.HS512.getJcaName())); // 18 =  AES256_CTS_HMAC_SHA1_96
 
     String jwtString = jwtBuilder.compact();
-    return AccessToken.builder().tokenType("Bearer").expiresIn("3600").extExpiresIn("3600")
-        .expiresOn(expiresAt.toString()).notBefore("0").resource("").token(jwtString).build();
+    return AccessToken.builder()
+        .tokenType("Bearer")
+        .expiresIn("3600")
+        .extExpiresIn("3600")
+        .expiresOn(expiresAt.toString())
+        .notBefore("0")
+        .resource("")
+        .token(jwtString)
+        .build();
   }
 }

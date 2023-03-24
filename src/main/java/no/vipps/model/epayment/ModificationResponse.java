@@ -40,8 +40,6 @@ public class ModificationResponse {
   private String pspReference;
   /** A reference */
   private String reference;
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
+
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

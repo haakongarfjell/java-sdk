@@ -12,7 +12,7 @@
 
 package no.vipps.model.checkout;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -46,6 +46,5 @@ public class InitiateSessionRequestMerchantInfo {
    * Complete URL to the merchant&#39;s terms and conditions. Example:
    * \&quot;https://example.com/vipps/termsAndConditions\&quot;.
    */
-  @Nullable
-  private String termsAndConditionsUrl;
+  @Nullable private String termsAndConditionsUrl;
 }

@@ -34,8 +34,6 @@ public class PaymentMethodResponse {
   private PaymentMethodType type;
   /** */
   private String cardBin;
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
+
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

@@ -44,8 +44,6 @@ public class CreatePaymentResponse {
   private URI redirectUrl;
   /** A reference */
   private String reference;
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
+
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

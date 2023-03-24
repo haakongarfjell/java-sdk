@@ -81,8 +81,6 @@ public class CreatePaymentRequest {
    * portal, and the settlement files.
    */
   private String paymentDescription;
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
+
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

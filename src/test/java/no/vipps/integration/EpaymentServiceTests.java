@@ -57,11 +57,15 @@ public class EpaymentServiceTests {
     assertNotNull(createPaymentResponse);
     assertEquals(reference, createPaymentResponse.getReference());
 
-    EpaymentService.forceApprovePayment(reference, ForceApprove.builder()
-        .customer(Customer.builder().phoneNumber(CUSTOMER_PHONE_NUMBER).build()).build());
+    EpaymentService.forceApprovePayment(
+        reference,
+        ForceApprove.builder()
+            .customer(Customer.builder().phoneNumber(CUSTOMER_PHONE_NUMBER).build())
+            .build());
 
     CaptureModificationRequest capturePaymentRequest =
-        CaptureModificationRequest.builder().modificationAmount(createPaymentRequest.getAmount())
+        CaptureModificationRequest.builder()
+            .modificationAmount(createPaymentRequest.getAmount())
             .build();
 
     ModificationResponse captureResponse =
@@ -71,7 +75,8 @@ public class EpaymentServiceTests {
     assertEquals(State.AUTHORIZED, captureResponse.getState());
 
     RefundModificationRequest refundPaymentRequest =
-        RefundModificationRequest.builder().modificationAmount(createPaymentRequest.getAmount())
+        RefundModificationRequest.builder()
+            .modificationAmount(createPaymentRequest.getAmount())
             .build();
 
     ModificationResponse modificationResponse =
@@ -91,19 +96,24 @@ public class EpaymentServiceTests {
     assertOneEvent(paymentEvents, PaymentEventName.AUTHORIZED);
   }
 
-  private void assertOneEvent(List<PaymentEvent> paymentEvents,
-                              PaymentEventName paymentEventName) {
-    assertEquals(1,
-        paymentEvents.stream().filter(r -> r.getPaymentEventName() == paymentEventName).toList().size());
+  private void assertOneEvent(List<PaymentEvent> paymentEvents, PaymentEventName paymentEventName) {
+    assertEquals(
+        1,
+        paymentEvents.stream()
+            .filter(r -> r.getPaymentEventName() == paymentEventName)
+            .toList()
+            .size());
   }
 
   private CreatePaymentRequest getCreatePaymentRequest(String reference) {
     return CreatePaymentRequest.builder()
         .amount(Amount.builder().currency(Currency.NOK).value(100L).build())
         .paymentMethod(PaymentMethod.builder().type(PaymentMethodType.WALLET).build())
-        .createPaymentRequestUserFlow(CreatePaymentRequestUserFlow.WEB_REDIRECT).reference(reference)
+        .createPaymentRequestUserFlow(CreatePaymentRequestUserFlow.WEB_REDIRECT)
+        .reference(reference)
         .paymentDescription("CheckoutServiceTests.Can_Create_And_Get_Session")
         .returnUrl("https://no.where.com/" + reference)
-        .customer(Customer.builder().phoneNumber(CUSTOMER_PHONE_NUMBER).build()).build();
+        .customer(Customer.builder().phoneNumber(CUSTOMER_PHONE_NUMBER).build())
+        .build();
   }
 }

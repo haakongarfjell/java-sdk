@@ -10,7 +10,8 @@ import no.vipps.exceptions.VippsTechnicalException;
 
 public class VippsRequestSerializer {
   private static final ObjectMapper objectMapper =
-      new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL)
+      new ObjectMapper()
+          .setSerializationInclusion(JsonInclude.Include.NON_NULL)
           .registerModule(new JavaTimeModule())
           .enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
           .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

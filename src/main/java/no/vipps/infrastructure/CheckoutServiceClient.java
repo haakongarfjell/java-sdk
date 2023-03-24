@@ -12,9 +12,10 @@ public class CheckoutServiceClient extends BaseServiceClient {
 
   @Override
   public Headers getHeaders() {
-    return Headers.of(Map.of(
-        Constants.HEADER_NAME_CLIENT_ID, VippsConfiguration.getInstance().getClientId(),
-        Constants.HEADER_NAME_CLIENT_SECRET, VippsConfiguration.getInstance().getClientSecret()
-    ));
+    return Headers.of(
+        Map.of(
+            Constants.HEADER_NAME_CLIENT_ID, VippsConfiguration.getInstance().getClientId(),
+            Constants.HEADER_NAME_CLIENT_SECRET,
+                VippsConfiguration.getInstance().getClientSecret()));
   }
 }

@@ -36,30 +36,16 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InitiateSessionRequest {
-  /**
-   *
-   */
+  /** */
   private InitiateSessionRequestMerchantInfo merchantInfo;
-  /**
-   *
-   */
+  /** */
   private InitiateSessionRequestTransaction transaction;
-  /**
-   *
-   */
+  /** */
   private InitiateSessionRequestLogistics logistics;
-  /**
-   *
-   */
+  /** */
   private InitiateSessionRequestPrefillCustomer prefillCustomer;
-  /**
-   *
-   */
+  /** */
   private InitiateSessionRequestConfiguration configuration;
 
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
-
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

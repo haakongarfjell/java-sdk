@@ -36,8 +36,6 @@ public class ProfileResponse {
    * Login Userinfo endpoint to fetch requested user data.
    */
   private String sub;
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
+
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

@@ -1,6 +1,5 @@
 package no.vipps.services;
 
-
 import no.vipps.infrastructure.CheckoutServiceClient;
 import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsServices;
@@ -14,8 +13,8 @@ public class CheckoutService {
     CheckoutServiceClient checkoutServiceClient = VippsServices.getCheckoutServiceClient();
     String requestPath = VippsConfiguration.getInstance().getBaseUrl() + "/checkout/v3/session";
 
-    return checkoutServiceClient.executeRequest(requestPath, "POST", initiateSessionRequest,
-        InitiateSessionResponse.class);
+    return checkoutServiceClient.executeRequest(
+        requestPath, "POST", initiateSessionRequest, InitiateSessionResponse.class);
   }
 
   public static SessionResponse getSessionInfo(String reference) {

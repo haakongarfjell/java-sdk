@@ -49,8 +49,5 @@ public class InitiateSessionResponse {
    */
   private String pollingUrl;
 
-  @Singular
-  @JsonAnySetter
-  @JsonAnyGetter
-  private Map<String, Object> additionalProperties;
+  @Singular @JsonAnySetter @JsonAnyGetter private Map<String, Object> additionalProperties;
 }

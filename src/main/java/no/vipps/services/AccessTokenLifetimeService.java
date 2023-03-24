@@ -12,9 +12,10 @@ class AccessTokenLifetimeService {
   private final JwtParser parser;
 
   public AccessTokenLifetimeService() {
-    parser = Jwts.parserBuilder().setSigningKey(
-        new SecretKeySpec(new byte[36],
-            SignatureAlgorithm.HS512.getJcaName())).build();
+    parser =
+        Jwts.parserBuilder()
+            .setSigningKey(new SecretKeySpec(new byte[36], SignatureAlgorithm.HS512.getJcaName()))
+            .build();
   }
 
   public OffsetDateTime getValidTo(String token) {

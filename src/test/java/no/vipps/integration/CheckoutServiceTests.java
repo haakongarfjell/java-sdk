@@ -13,21 +13,27 @@ import no.vipps.model.checkout.LogisticsOptionBaseAmount;
 import no.vipps.model.checkout.SessionResponse;
 import no.vipps.services.CheckoutService;
 import org.junit.jupiter.api.Test;
-import org.openapitools.jackson.nullable.JsonNullable;
 
 public class CheckoutServiceTests {
   @Test
   public void testCanCreateAndGetSession() {
     String reference = UUID.randomUUID().toString();
-    InitiateSessionRequest sessionInitiationRequest = InitiateSessionRequest.builder().transaction(
-            InitiateSessionRequestTransaction.builder()
-                .amount(LogisticsOptionBaseAmount.builder().currency("NOK").value(1000).build())
-                .reference(reference)
-                .paymentDescription("CheckoutServiceTests.Can_Create_And_Get_Session").build())
-        .merchantInfo(InitiateSessionRequestMerchantInfo.builder()
-            .callbackAuthorizationToken(UUID.randomUUID().toString())
-            .callbackUrl("https://no.where.com/callback").returnUrl("https://no.where.com/return")
-            .termsAndConditionsUrl("https://no.where.com/terms").build()).build();
+    InitiateSessionRequest sessionInitiationRequest =
+        InitiateSessionRequest.builder()
+            .transaction(
+                InitiateSessionRequestTransaction.builder()
+                    .amount(LogisticsOptionBaseAmount.builder().currency("NOK").value(1000).build())
+                    .reference(reference)
+                    .paymentDescription("CheckoutServiceTests.Can_Create_And_Get_Session")
+                    .build())
+            .merchantInfo(
+                InitiateSessionRequestMerchantInfo.builder()
+                    .callbackAuthorizationToken(UUID.randomUUID().toString())
+                    .callbackUrl("https://no.where.com/callback")
+                    .returnUrl("https://no.where.com/return")
+                    .termsAndConditionsUrl("https://no.where.com/terms")
+                    .build())
+            .build();
 
     InitiateSessionResponse sessionResponse =
         CheckoutService.initiateSession(sessionInitiationRequest);
