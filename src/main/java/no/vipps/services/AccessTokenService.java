@@ -7,8 +7,9 @@ import no.vipps.model.accesstoken.AccessToken;
 public class AccessTokenService {
 
   public static AccessToken getAccessToken() {
-    String key = VippsConfiguration.getInstance().getClientId()
-        + VippsConfiguration.getInstance().getClientSecret();
+    String key =
+        VippsConfiguration.getInstance().getClientId()
+            + VippsConfiguration.getInstance().getClientSecret();
     AccessToken cachedToken = AccessTokenCacheService.get(key);
 
     if (cachedToken != null) {

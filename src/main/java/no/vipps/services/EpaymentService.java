@@ -2,14 +2,14 @@ package no.vipps.services;
 
 import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsServices;
+import no.vipps.model.epayment.CaptureModificationRequest;
+import no.vipps.model.epayment.CreatePaymentRequest;
+import no.vipps.model.epayment.CreatePaymentResponse;
+import no.vipps.model.epayment.ForceApprove;
+import no.vipps.model.epayment.GetPaymentResponse;
 import no.vipps.model.epayment.ModificationResponse;
-import no.vipps.model.epayment.capturepayment.CapturePaymentRequest;
-import no.vipps.model.epayment.createpayment.CreatePaymentRequest;
-import no.vipps.model.epayment.createpayment.CreatePaymentResponse;
-import no.vipps.model.epayment.forceapprove.ForceApproveRequest;
-import no.vipps.model.epayment.getpayment.GetPaymentResponse;
-import no.vipps.model.epayment.getpaymenteventlog.GetPaymentEventLog;
-import no.vipps.model.epayment.refundpayment.RefundPaymentRequest;
+import no.vipps.model.epayment.PaymentEvent;
+import no.vipps.model.epayment.RefundModificationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +18,8 @@ public class EpaymentService {
 
   public static CreatePaymentResponse createPayment(CreatePaymentRequest createPaymentRequest) {
     return VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath(), "POST", createPaymentRequest,
-            CreatePaymentResponse.class);
+        .executeRequest(
+            getRequestPath(), "POST", createPaymentRequest, CreatePaymentResponse.class);
   }
 
   public static GetPaymentResponse getPayment(String reference) {
@@ -27,7 +27,7 @@ public class EpaymentService {
         .executeRequest(getRequestPath(reference, ""), "GET", GetPaymentResponse.class);
   }
 
-  public static Iterable<GetPaymentEventLog> getPaymentEventLog(String reference) {
+  public static Iterable<PaymentEvent> getPaymentEventLog(String reference) {
     return VippsServices.getEpaymentServiceClient()
         .executeRequest(getRequestPath(reference, "events"), "GET", Iterable.class);
   }
@@ -37,27 +37,37 @@ public class EpaymentService {
         .executeRequest(getRequestPath(reference, "cancel"), "POST", ModificationResponse.class);
   }
 
-  public static ModificationResponse capturePayment(String reference,
-                                                    CapturePaymentRequest capturePaymentRequest) {
+  public static ModificationResponse capturePayment(
+      String reference, CaptureModificationRequest captureModificationRequest) {
     return VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath(reference, "capture"), "POST", capturePaymentRequest,
+        .executeRequest(
+            getRequestPath(reference, "capture"),
+            "POST",
+            captureModificationRequest,
             ModificationResponse.class);
   }
 
-  public static ModificationResponse refundPayment(String reference,
-                                                   RefundPaymentRequest refundPaymentRequest) {
+  public static ModificationResponse refundPayment(
+      String reference, RefundModificationRequest refundModificationRequest) {
     return VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath(reference, "refund"), "POST", refundPaymentRequest,
+        .executeRequest(
+            getRequestPath(reference, "refund"),
+            "POST",
+            refundModificationRequest,
             ModificationResponse.class);
   }
 
-  public static void forceApprovePayment(String reference,
-                                         ForceApproveRequest forceApproveRequest) {
-    VippsServices.getEpaymentServiceClient().executeRequest(
-        (VippsConfiguration.getInstance().getBaseUrl() + "/epayment/v1/test/payments/" + reference +
-            "/approve"), "POST", forceApproveRequest, null);
+  public static void forceApprovePayment(String reference, ForceApprove forceApproveRequest) {
+    VippsServices.getEpaymentServiceClient()
+        .executeRequest(
+            (VippsConfiguration.getInstance().getBaseUrl()
+                + "/epayment/v1/test/payments/"
+                + reference
+                + "/approve"),
+            "POST",
+            forceApproveRequest,
+            null);
   }
-
 
   private static String getRequestPath(String reference, String path) {
     StringBuilder requestPath =
@@ -74,5 +84,4 @@ public class EpaymentService {
   private static String getRequestPath() {
     return VippsConfiguration.getInstance().getBaseUrl() + "/epayment/v1/payments";
   }
-
 }

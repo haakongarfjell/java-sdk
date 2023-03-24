@@ -16,7 +16,8 @@ public class EpaymentServiceClient extends BaseServiceClient {
   public Headers getHeaders() {
     String authToken = AccessTokenService.getAccessToken().toString();
     HashMap<String, String> headers = new HashMap<>();
-    headers.put(Constants.HEADER_NAME_AUTHORIZATION,
+    headers.put(
+        Constants.HEADER_NAME_AUTHORIZATION,
         Constants.AUTHORIZATION_SCHEME_NAME_BEARER + " " + authToken);
     headers.put("Idempotency-Key", UUID.randomUUID().toString());
     return Headers.of(headers);

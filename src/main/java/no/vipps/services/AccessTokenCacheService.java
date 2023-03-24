@@ -27,8 +27,8 @@ public class AccessTokenCacheService {
     OffsetDateTime tokenValidToWithBackoff = tokenValidTo.minus(BACKOFF_DURATION);
 
     if (tokenValidToWithBackoff != null && tokenValidToWithBackoff.isAfter(OffsetDateTime.now())) {
-      CACHE.put(getPrefixedHashedKey(key),
-          new AccessTokenCacheEntry(token, tokenValidToWithBackoff));
+      CACHE.put(
+          getPrefixedHashedKey(key), new AccessTokenCacheEntry(token, tokenValidToWithBackoff));
     }
   }
 

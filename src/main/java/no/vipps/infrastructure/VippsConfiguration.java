@@ -1,6 +1,7 @@
 package no.vipps.infrastructure;
 
 import java.util.Objects;
+import no.vipps.exceptions.VippsUserException;
 
 public class VippsConfiguration {
 
@@ -28,7 +29,9 @@ public class VippsConfiguration {
       VippsConfigurationOptions vippsConfigurationOptions,
       VippsHttpClient vippsHttpClient
   ) {
-    Objects.requireNonNull(vippsConfigurationOptions, "vippsConfigurationOptions must not be null");
+    if (vippsConfigurationOptions == null) {
+      throw new VippsUserException("vippsConfigurationOptions must not be null");
+    }
 
     if (vippsHttpClient != null) {
       setVippsHttpClient(vippsHttpClient);
@@ -40,11 +43,11 @@ public class VippsConfiguration {
     clientSecret = vippsConfigurationOptions.getClientSecret();
     subscriptionKey = vippsConfigurationOptions.getSubscriptionKey();
     merchantSerialNumber = vippsConfigurationOptions.getMerchantSerialNumber();
-    testMode = vippsConfigurationOptions.isUseTestMode();
+    testMode = vippsConfigurationOptions.isUseTestMode;
   }
 
   private RuntimeException createMissingConfigException(String propertyName) {
-    return new IllegalArgumentException("VippsConfiguration incomplete - " + propertyName +
+    return new VippsUserException("VippsConfiguration incomplete - " + propertyName +
         " is missing. Have you run configureVipps?");
   }
 

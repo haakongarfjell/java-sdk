@@ -1,0 +1,23 @@
+/**
+* {{classname}}.
+* {{#description}}
+    * {{description}}
+    * {{/description}}
+*/
+{{>generatedAnnotation}}
+@Jacksonized
+@EqualsAndHashCode
+@Getter
+@ToString
+@Builder
+public class {{classname}} {{#parent}}extends {{{parent}}}{{/parent}}{{^parent}}{{#implements}}implements {{{implements}}}{{/implements}}{{/parent}} {
+{{#vars}}
+    /**
+    * {{description}}
+    */
+    {{#useBeanValidation}}
+        {{>beanValidation}}
+    {{/useBeanValidation}}
+    private {{{datatypeWithEnum}}} {{name}}{{^required}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}}{{/required}};
+{{/vars}}
+}

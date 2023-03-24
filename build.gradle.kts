@@ -1,11 +1,14 @@
 import java.net.URL
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.regex.Pattern
 
 plugins {
     id("java")
     `java-library`
-    checkstyle
     id("org.hidetake.swagger.generator") version "2.19.2"
-    id("io.freefair.lombok") version "6.6.2"
+    id("io.freefair.lombok") version "8.0.0-rc2"
+    id("com.diffplug.spotless") version "6.4.0"
     id("com.jaredsburrows.license") version "0.9.0"
 }
 
@@ -38,16 +41,25 @@ dependencies {
     swaggerCodegen("org.openapitools:openapi-generator-cli:6.4.0")
     implementation("jakarta.ws.rs:jakarta.ws.rs-api:3.1.0")
     implementation("jakarta.annotation:jakarta.annotation-api:2.1.1")
+    implementation("io.swagger:swagger-annotations:1.6.9")
     implementation("org.openapitools:openapi-generator-gradle-plugin:6.4.0")
+    implementation("com.azure:azure-core:1.37.0")
+    implementation("com.azure:azure-identity:1.8.0")
+    implementation("com.azure:azure-security-keyvault-secrets:4.5.4")
+    api("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-orgjson:0.11.5")
 }
-
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-checkstyle {
-    toolVersion = "10.8.0"
+spotless {
+    java {
+        googleJavaFormat("1.13.0") // 1.7 is the last version that supports Java 8
+        removeUnusedImports()
+    }
 }
 
 swaggerSources {
@@ -61,7 +73,6 @@ swaggerSources {
         code(closureOf<org.hidetake.gradle.swagger.generator.GenerateSwaggerCode> {
             language = "java"
             configFile = file("./config/swagger/${apiName}.json")
-            components = listOf("models")
             library = "jersey3"
         })
     }
@@ -75,13 +86,36 @@ swaggerSources {
         code(closureOf<org.hidetake.gradle.swagger.generator.GenerateSwaggerCode> {
             language = "java"
             configFile = file("./config/swagger/${apiName}.json")
-            components = listOf("models")
             library = "jersey3"
         })
     }
-licenseReport {
-    generateCsvReport = false
-    generateHtmlReport = true
-    generateJsonReport = false
-    generateTextReport = false
+
+    licenseReport {
+        generateCsvReport = false
+        generateHtmlReport = true
+        generateJsonReport = false
+        generateTextReport = false
+    }
+}
+
+
+tasks.register("postProcessSwaggerCode") {
+    dependsOn("generateSwaggerCode")
+    doLast {
+        val outputDirectory = "./build"
+        val enumSuffixPattern = Pattern.compile("(private\\s+)(\\w+)Enum(\\s+\\w+(\\s*=\\s*.+)?;)")
+
+        fun removeEnumSuffix(file: Path) {
+            val fileContent = file.toFile().readText()
+            val matcher = enumSuffixPattern.matcher(fileContent)
+            if (matcher.find()) {
+                val modifiedContent = matcher.replaceAll("$1$2$3")
+                file.toFile().writeText(modifiedContent)
+            }
+        }
+
+        Files.walk(Path.of(outputDirectory)).use { paths ->
+            paths.filter { it.toFile().isFile && it.fileName.toString().endsWith(".java") }.forEach { removeEnumSuffix(it) }
+        }
+    }
 }

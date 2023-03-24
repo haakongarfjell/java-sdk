@@ -14,5 +14,5 @@ public class VippsConfigurationOptions {
   private String clientSecret;
   private String subscriptionKey;
   private String merchantSerialNumber;
-  private boolean useTestMode;
+  boolean isUseTestMode;
 }

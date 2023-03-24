@@ -4,11 +4,13 @@
   "hideGenerationTimestamp": true,
   "withXml": false,
   "serializableModel": false,
-  "dateLibrary": "java8-localdatetime",
+  "dateLibrary": "java8",
   "java8": true,
   "fullJavaUtil": false,
-  "useRuntimeException": true,
-  "useLombok": true,
-  "serializationLibrary": "jackson",
-  "additionalModelTypeAnnotations": "@lombok.Builder(toBuilder=true) @lombok.EqualsAndHashCode @lombok.Getter @lombok.ToString"
+  "useRuntimeException": false,
+  "templateDir": "custom-templates",
+  "templateParams": {
+    "removeEnumSuffix": true
+  },
+  "enumNameSuffix": "a"
 }

@@ -15,8 +15,8 @@ public final class VippsServices {
 
   public static AccessTokenServiceClient getAccessTokenServiceClient() {
     if (accessTokenServiceClient == null) {
-      accessTokenServiceClient = new AccessTokenServiceClient(
-          VippsConfiguration.getInstance().getVippsHttpClient());
+      accessTokenServiceClient =
+          new AccessTokenServiceClient(VippsConfiguration.getInstance().getVippsHttpClient());
     }
     return accessTokenServiceClient;
   }

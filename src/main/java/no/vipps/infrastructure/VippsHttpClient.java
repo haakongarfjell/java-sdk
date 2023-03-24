@@ -1,6 +1,5 @@
 package no.vipps.infrastructure;
 
-
 import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -28,8 +27,8 @@ public class VippsHttpClient implements VippsClient {
 
     HashMap<String, String> headers = new HashMap<>();
     headers.put("Ocp-Apim-Subscription-Key", VippsConfiguration.getInstance().getSubscriptionKey());
-    headers.put("Merchant-Serial-Number",
-        VippsConfiguration.getInstance().getMerchantSerialNumber());
+    headers.put(
+        "Merchant-Serial-Number", VippsConfiguration.getInstance().getMerchantSerialNumber());
     headers.put("Vipps-System-Name", VippsConfiguration.getInstance().getSystemName());
     headers.put("Vipps-System-Version", VippsConfiguration.getInstance().getSystemVersion());
     headers.put("Vipps-System-Plugin-Name", VippsConfiguration.getInstance().getPluginName());
@@ -58,7 +57,9 @@ public class VippsHttpClient implements VippsClient {
   }
 
   private OkHttpClient createDefaultOkHttpClient() {
-    return new OkHttpClient.Builder().retryOnConnectionFailure(true).connectTimeout(DEFAULT_TIMEOUT)
+    return new OkHttpClient.Builder()
+        .retryOnConnectionFailure(true)
+        .connectTimeout(DEFAULT_TIMEOUT)
         .build();
   }
 }

@@ -12,12 +12,14 @@ public class AccessTokenServiceClient extends BaseServiceClient {
 
   @Override
   public Headers getHeaders() {
-    return Headers.of(new HashMap<>() {
-      {
-        put(Constants.HEADER_NAME_CLIENT_ID, VippsConfiguration.getInstance().getClientId());
-        put(Constants.HEADER_NAME_CLIENT_SECRET,
-            VippsConfiguration.getInstance().getClientSecret());
-      }
-    });
+    return Headers.of(
+        new HashMap<>() {
+          {
+            put(Constants.HEADER_NAME_CLIENT_ID, VippsConfiguration.getInstance().getClientId());
+            put(
+                Constants.HEADER_NAME_CLIENT_SECRET,
+                VippsConfiguration.getInstance().getClientSecret());
+          }
+        });
   }
 }

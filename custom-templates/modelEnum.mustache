@@ -1,0 +1,15 @@
+/**
+* {{classname}}.
+* {{#description}}
+    * {{description}}
+    * {{/description}}
+*/
+{{>generatedAnnotation}}
+public enum {{classname}} {
+{{#allowableValues}}{{#enumVars}}
+    /**
+    * {{value}}
+    */
+    {{name}}{{^last}},{{/last}}
+{{/enumVars}}{{/allowableValues}}
+}

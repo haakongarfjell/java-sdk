@@ -1,0 +1,56 @@
+{{>licenseInfo}}
+
+package {{package}};
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.Builder;
+import lombok.extern.jackson.Jacksonized;
+{{#imports}}
+    import {{import}};
+{{/imports}}
+{{#jackson}}
+    import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+    import com.fasterxml.jackson.annotation.JsonTypeName;
+    {{#withXml}}
+        import com.fasterxml.jackson.dataformat.xml.annotation.*;
+    {{/withXml}}
+    {{#vendorExtensions.x-has-readonly-properties}}
+        import com.fasterxml.jackson.annotation.JsonCreator;
+    {{/vendorExtensions.x-has-readonly-properties}}
+{{/jackson}}
+{{#jsonb}}
+    import java.lang.reflect.Type;
+    import {{javaxPackage}}.json.bind.annotation.JsonbTypeDeserializer;
+    import {{javaxPackage}}.json.bind.annotation.JsonbTypeSerializer;
+    import {{javaxPackage}}.json.bind.serializer.DeserializationContext;
+    import {{javaxPackage}}.json.bind.serializer.JsonbDeserializer;
+    import {{javaxPackage}}.json.bind.serializer.JsonbSerializer;
+    import {{javaxPackage}}.json.bind.serializer.SerializationContext;
+    import {{javaxPackage}}.json.stream.JsonGenerator;
+    import {{javaxPackage}}.json.stream.JsonParser;
+    import {{javaxPackage}}.json.bind.annotation.JsonbProperty;
+    {{#vendorExtensions.x-has-readonly-properties}}
+        import {{javaxPackage}}.json.bind.annotation.JsonbCreator;
+    {{/vendorExtensions.x-has-readonly-properties}}
+{{/jsonb}}
+{{#useBeanValidation}}
+    import {{javaxPackage}}.validation.constraints.*;
+    import {{javaxPackage}}.validation.Valid;
+{{/useBeanValidation}}
+{{#performBeanValidation}}
+    import org.hibernate.validator.constraints.*;
+{{/performBeanValidation}}
+{{#supportUrlQuery}}
+    import java.io.UnsupportedEncodingException;
+    import java.net.URLEncoder;
+    import java.util.StringJoiner;
+{{/supportUrlQuery}}
+
+{{#models}}
+    {{#model}}
+        {{#isEnum}}{{>modelEnum}}{{/isEnum}}{{^isEnum}}{{>pojo}}{{/isEnum}}
+    {{/model}}
+{{/models}}
