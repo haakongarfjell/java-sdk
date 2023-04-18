@@ -14,7 +14,7 @@ public class EpaymentServiceClient extends BaseServiceClient {
 
   @Override
   public Headers getHeaders() {
-    String authToken = AccessTokenService.getAccessToken().toString();
+    String authToken = AccessTokenService.getAccessToken().getToken();
     HashMap<String, String> headers = new HashMap<>();
     headers.put(
         Constants.HEADER_NAME_AUTHORIZATION,

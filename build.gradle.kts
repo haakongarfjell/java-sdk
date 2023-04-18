@@ -52,6 +52,10 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    systemProperty("CLIENT_ID", System.getenv("CLIENT_ID"))
+    systemProperty("CLIENT_SECRET", System.getenv("CLIENT_SECRET"))
+    systemProperty("MERCHANT_SERIAL_NUMBER", System.getenv("MERCHANT_SERIAL_NUMBER"))
+    systemProperty("SUBSCRIPTION_KEY", System.getenv("SUBSCRIPTION_KEY"))
 }
 
 spotless {

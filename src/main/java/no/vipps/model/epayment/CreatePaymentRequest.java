@@ -67,7 +67,7 @@ public class CreatePaymentRequest {
    * &#x60;userFlow&#x60; is &#x60;PUSH_MESSAGE&#x60;, a valid value for
    * &#x60;customer.phoneNumber&#x60; is required.
    */
-  private CreatePaymentRequestUserFlow createPaymentRequestUserFlow;
+  private CreatePaymentRequestUserFlow userFlow;
   /**
    * The payment will expire at the given date and time. The format must adhere to RFC 3339. The
    * value must be more than 10 minutes and less than 28 days in the future. Can only be combined

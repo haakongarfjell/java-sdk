@@ -4,16 +4,15 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import no.vipps.exceptions.VippsTechnicalException;
 import no.vipps.model.accesstoken.AccessToken;
 
 public class AccessTokenCacheService {
-
-  private static final AccessTokenLifetimeService LIFETIME_SERVICE =
-      new AccessTokenLifetimeService();
 
   private static final Duration BACKOFF_DURATION = Duration.ofMinutes(2);
 
@@ -23,7 +22,8 @@ public class AccessTokenCacheService {
   private static final String KEY_PREFIX = "access-token-";
 
   public static void put(String key, AccessToken token) {
-    OffsetDateTime tokenValidTo = LIFETIME_SERVICE.getValidTo(token.getToken());
+    OffsetDateTime tokenValidTo =
+        Instant.ofEpochSecond(Long.parseLong(token.getExpiresOn())).atOffset(ZoneOffset.UTC);
     OffsetDateTime tokenValidToWithBackoff = tokenValidTo.minus(BACKOFF_DURATION);
 
     if (tokenValidToWithBackoff != null && tokenValidToWithBackoff.isAfter(OffsetDateTime.now())) {

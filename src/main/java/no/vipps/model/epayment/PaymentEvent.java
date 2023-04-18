@@ -32,7 +32,7 @@ public class PaymentEvent {
   /** Reference value for a payment defined by Vipps. */
   private String pspReference;
   /** */
-  private PaymentEventName paymentEventName;
+  private PaymentEventName name;
   /** */
   private PaymentAction paymentAction;
   /** */

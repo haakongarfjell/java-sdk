@@ -43,11 +43,17 @@ public abstract class BaseServiceClient {
   private <TResponse> TResponse executeRequestBaseAndParse(
       String path, String httpMethod, RequestBody requestBody, Class<TResponse> responseClass) {
     String responseBody = executeRequestBase(path, httpMethod, requestBody);
+    if (responseClass == null) {
+      return null;
+    }
     return VippsRequestSerializer.<TResponse>deserializeVippsResponse(responseBody, responseClass);
   }
 
   private String executeRequestBase(String path, String httpMethod, RequestBody requestBody) {
     // TODO: Retry policy
+    if (requestBody == null && httpMethod == "POST") {
+      requestBody = RequestBody.create("", null);
+    }
     Request request =
         new Request.Builder()
             .url(path)

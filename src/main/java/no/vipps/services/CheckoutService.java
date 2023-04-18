@@ -19,7 +19,8 @@ public class CheckoutService {
 
   public static SessionResponse getSessionInfo(String reference) {
     CheckoutServiceClient checkoutServiceClient = VippsServices.getCheckoutServiceClient();
-    String requestPath = VippsConfiguration.getInstance().getBaseUrl() + "/checkout/v3/session";
+    String requestPath =
+        VippsConfiguration.getInstance().getBaseUrl() + "/checkout/v3/session/" + reference;
     return checkoutServiceClient.executeRequest(requestPath, "GET", SessionResponse.class);
   }
 }

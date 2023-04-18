@@ -18,7 +18,8 @@ public class AccessTokenService {
 
     String requestPath = VippsConfiguration.getInstance().getBaseUrl() + "/accesstoken/get";
     AccessToken accessToken =
-        VippsServices.getAccessTokenServiceClient().executeRequest(requestPath, "POST");
+        VippsServices.getAccessTokenServiceClient()
+            .executeRequest(requestPath, "POST", "", AccessToken.class);
 
     AccessTokenCacheService.put(key, accessToken);
     return accessToken;

@@ -44,11 +44,14 @@ public class VippsHttpClient implements VippsClient {
 
   @Override
   public String send(Request request) throws VippsTechnicalException {
-    Request modifiedRequest = request.newBuilder().headers(getHeaders()).build();
-
+    Request modifiedRequest =
+        request
+            .newBuilder()
+            .headers(request.headers().newBuilder().addAll(getHeaders()).build())
+            .build();
     try (Response response = httpClient.newCall(modifiedRequest).execute()) {
       if (!response.isSuccessful()) {
-        throw new IOException("Unexpected code " + response);
+        throw new IOException("Unexpected response " + response + ": " + response.body().string());
       }
       return response.body() != null ? response.body().string() : "";
     } catch (IOException ioException) {

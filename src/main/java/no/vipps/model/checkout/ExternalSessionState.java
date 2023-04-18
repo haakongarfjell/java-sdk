@@ -17,17 +17,17 @@ package no.vipps.model.checkout;
 public enum ExternalSessionState {
 
   /** &quot;SessionCreated&quot; */
-  SESSIONCREATED,
+  SessionCreated,
 
   /** &quot;PaymentInitiated&quot; */
-  PAYMENTINITIATED,
+  PaymentInitiated,
 
   /** &quot;SessionExpired&quot; */
-  SESSIONEXPIRED,
+  SessionExpired,
 
   /** &quot;PaymentSuccessful&quot; */
-  PAYMENTSUCCESSFUL,
+  PaymentSuccessful,
 
   /** &quot;PaymentTerminated&quot; */
-  PAYMENTTERMINATED,
+  PaymentTerminated,
 }

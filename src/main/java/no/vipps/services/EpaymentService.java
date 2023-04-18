@@ -27,9 +27,9 @@ public class EpaymentService {
         .executeRequest(getRequestPath(reference, ""), "GET", GetPaymentResponse.class);
   }
 
-  public static Iterable<PaymentEvent> getPaymentEventLog(String reference) {
+  public static PaymentEvent[] getPaymentEventLog(String reference) {
     return VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath(reference, "events"), "GET", Iterable.class);
+        .executeRequest(getRequestPath(reference, "events"), "GET", PaymentEvent[].class);
   }
 
   public static ModificationResponse cancelPayment(String reference) {

@@ -1,11 +1,11 @@
 name: Run Gradle on PR and push
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
     paths-ignore:
-      - 'docs/**'
+      - "docs/**"
 jobs:
   gradle:
     runs-on: ubuntu-latest
@@ -16,4 +16,9 @@ jobs:
           distribution: corretto
           java-version: 17
       - name: Execute Gradle build
-        run: ./gradlew build
+        env:
+          CLIENT_ID: ${{  secrets. CLIENT_ID }}
+          CLIENT_SECRET: ${{  secrets. CLIENT_SECRET }}
+          SUBSCRIPTION_KEY: ${{  secrets. SUBSCRIPTION_KEY }}
+          MERCHANT_SERIAL_NUMBER: ${{  secrets. MERCHANT_SERIAL_NUMBER }}
+        run: ./gradlew :test --info

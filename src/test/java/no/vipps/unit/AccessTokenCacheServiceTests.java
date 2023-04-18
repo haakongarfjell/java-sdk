@@ -32,8 +32,8 @@ public class AccessTokenCacheServiceTests {
     String key = UUID.randomUUID().toString();
     AccessToken accessToken =
         getToken(
-            getInstantSubtract(2, ChronoUnit.HOURS).atOffset(ZoneOffset.UTC).toInstant(),
-            getInstantAdd(1, ChronoUnit.HOURS).atOffset(ZoneOffset.UTC).toInstant());
+            getInstantSubtract(1, ChronoUnit.HOURS).atOffset(ZoneOffset.UTC).toInstant(),
+            getInstantAdd(0, ChronoUnit.HOURS).atOffset(ZoneOffset.UTC).toInstant());
     AccessTokenCacheService.put(key, accessToken);
     AccessToken res = AccessTokenCacheService.get(key);
     assertNull(res);
@@ -68,14 +68,14 @@ public class AccessTokenCacheServiceTests {
             .signWith(
                 new SecretKeySpec(
                     new byte[36],
-                    SignatureAlgorithm.HS512.getJcaName())); // 18 =  AES256_CTS_HMAC_SHA1_96
+                    SignatureAlgorithm.HS512.getJcaName())); // 18 = AES256_CTS_HMAC_SHA1_96
 
     String jwtString = jwtBuilder.compact();
     return AccessToken.builder()
         .tokenType("Bearer")
         .expiresIn("3600")
         .extExpiresIn("3600")
-        .expiresOn(expiresAt.toString())
+        .expiresOn(Long.toString(expiresAt.toEpochMilli() / 1000))
         .notBefore("0")
         .resource("")
         .token(jwtString)

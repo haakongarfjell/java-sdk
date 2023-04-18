@@ -5,10 +5,10 @@ import no.vipps.exceptions.VippsUserException;
 public class VippsConfiguration {
 
   private static VippsConfiguration INSTANCE;
-  private String systemName;
-  private String systemVersion;
-  private String pluginName = "checkout-sandbox";
-  private String pluginVersion = "1.0";
+  private String systemName = "Vipps Java SDK";
+  private String systemVersion = "1.0";
+  private String pluginName;
+  private String pluginVersion;
   private String clientId;
   private String clientSecret;
   private String subscriptionKey;
@@ -25,7 +25,8 @@ public class VippsConfiguration {
   }
 
   public void configureVipps(
-      VippsConfigurationOptions vippsConfigurationOptions, VippsHttpClient vippsHttpClient) {
+      VippsConfigurationOptions vippsConfigurationOptions, VippsHttpClient vippsHttpClient)
+      throws VippsUserException {
     if (vippsConfigurationOptions == null) {
       throw new VippsUserException("vippsConfigurationOptions must not be null");
     }
@@ -41,6 +42,10 @@ public class VippsConfiguration {
     subscriptionKey = vippsConfigurationOptions.getSubscriptionKey();
     merchantSerialNumber = vippsConfigurationOptions.getMerchantSerialNumber();
     testMode = vippsConfigurationOptions.isUseTestMode;
+  }
+
+  public static void reset() {
+    INSTANCE = null;
   }
 
   private RuntimeException createMissingConfigException(String propertyName) {
@@ -94,7 +99,7 @@ public class VippsConfiguration {
   }
 
   public String getBaseUrl() {
-    return isTestMode() ? "https://api-test.vipps.no" : "https://api.vipps.no";
+    return isTestMode() ? "https://apitest.vipps.no" : "https://api.vipps.no";
   }
 
   public VippsHttpClient getVippsHttpClient() {

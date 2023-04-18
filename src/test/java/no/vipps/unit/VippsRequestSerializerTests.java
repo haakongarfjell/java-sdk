@@ -261,7 +261,7 @@ public class VippsRequestSerializerTests {
                     .build())
             .paymentMethod(PaymentMethod.builder().type(PaymentMethodType.WALLET).build())
             .reference(UUID.randomUUID().toString())
-            .createPaymentRequestUserFlow(CreatePaymentRequestUserFlow.WEB_REDIRECT)
+            .userFlow(CreatePaymentRequestUserFlow.WEB_REDIRECT)
             .additionalProperties(Map.of("Transaction", Map.of("Metadata", Map.of("KID", kid))))
             .build();
 

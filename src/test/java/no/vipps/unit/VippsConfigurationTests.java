@@ -12,6 +12,7 @@ public class VippsConfigurationTests {
     Assertions.assertThrows(
         VippsUserException.class,
         () -> {
+          VippsConfiguration.reset();
           AccessTokenService.getAccessToken().getToken();
         });
   }
@@ -20,8 +21,6 @@ public class VippsConfigurationTests {
   public void usingVippsConfigurationWithInvalidThrowsException() {
     Assertions.assertThrows(
         VippsUserException.class,
-        () -> {
-          VippsConfiguration.getInstance().configureVipps(null, null);
-        });
+        () -> VippsConfiguration.getInstance().configureVipps(null, null));
   }
 }
