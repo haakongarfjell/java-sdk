@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import no.vipps.exceptions.VippsTechnicalException;
 import okhttp3.Headers;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -60,9 +61,27 @@ public class VippsHttpClient implements VippsClient {
   }
 
   private OkHttpClient createDefaultOkHttpClient() {
-    return new OkHttpClient.Builder()
-        .retryOnConnectionFailure(true)
-        .connectTimeout(DEFAULT_TIMEOUT)
-        .build();
+    var client =
+        new OkHttpClient.Builder()
+            .retryOnConnectionFailure(true)
+            .connectTimeout(DEFAULT_TIMEOUT)
+            .addInterceptor(
+                new Interceptor() {
+                  @Override
+                  public Response intercept(Chain chain) throws IOException {
+                    Request request = chain.request();
+                    Response response = chain.proceed(request);
+                    int tryCount = 0;
+                    while (response.code() >= 500 && tryCount < 3) {
+                      tryCount++;
+                      response.close();
+                      response = chain.proceed(request);
+                    }
+                    return response;
+                  }
+                })
+            .build();
+
+    return client;
   }
 }
