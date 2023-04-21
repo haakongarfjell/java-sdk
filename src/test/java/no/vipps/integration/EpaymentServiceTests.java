@@ -25,24 +25,27 @@ import no.vipps.model.epayment.PaymentMethodType;
 import no.vipps.model.epayment.RefundModificationRequest;
 import no.vipps.model.epayment.State;
 import no.vipps.services.EpaymentService;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class EpaymentServiceTests {
 
-  public EpaymentServiceTests() {
+  private static final String CUSTOMER_PHONE_NUMBER = "4747753942";
+
+  @BeforeAll
+  public static void Authenticate() {
     var config = VippsConfigurationOptions.builder()
-        .clientId(System.getProperty("CLIENT_ID"))
-        .clientSecret(System.getProperty("CLIENT_SECRET"))
-        .subscriptionKey(System.getProperty("SUBSCRIPTION_KEY"))
-        .merchantSerialNumber(System.getProperty("MERCHANT_SERIAL_NUMBER"))
+        .clientId(System.getenv("CLIENT_ID"))
+        .clientSecret(System.getenv("CLIENT_SECRET"))
+        .subscriptionKey(System.getenv("SUBSCRIPTION_KEY"))
+        .merchantSerialNumber(System.getenv("MERCHANT_SERIAL_NUMBER"))
         .isUseTestMode(true)
         .pluginName("Vipps.net.IntegrationTests")
         .pluginVersion("1.0.0")
         .build();
     VippsConfiguration.getInstance().configureVipps(config, null);
   }
-
-  private static final String CUSTOMER_PHONE_NUMBER = "4747753942";
 
   @Test
   public void testCanCreateGetCancelPayment() throws Exception {
