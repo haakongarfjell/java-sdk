@@ -61,7 +61,7 @@ public class VippsHttpClient implements VippsClient {
   }
 
   private OkHttpClient createDefaultOkHttpClient() {
-    var client =
+    OkHttpClient client =
         new OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
             .connectTimeout(DEFAULT_TIMEOUT)

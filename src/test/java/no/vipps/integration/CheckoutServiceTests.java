@@ -6,12 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.UUID;
 import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsConfigurationOptions;
+import no.vipps.model.checkout.Amount;
 import no.vipps.model.checkout.ExternalSessionState;
 import no.vipps.model.checkout.InitiateSessionRequest;
 import no.vipps.model.checkout.InitiateSessionRequestMerchantInfo;
 import no.vipps.model.checkout.InitiateSessionRequestTransaction;
 import no.vipps.model.checkout.InitiateSessionResponse;
-import no.vipps.model.checkout.LogisticsOptionBaseAmount;
 import no.vipps.model.checkout.SessionResponse;
 import no.vipps.services.CheckoutService;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +21,7 @@ public class CheckoutServiceTests {
 
   @BeforeAll
   public static void Authenticate() {
-    var config =
+    VippsConfigurationOptions config =
         VippsConfigurationOptions.builder()
             .clientId(System.getenv("CLIENT_ID"))
             .clientSecret(System.getenv("CLIENT_SECRET"))
@@ -41,7 +41,7 @@ public class CheckoutServiceTests {
         InitiateSessionRequest.builder()
             .transaction(
                 InitiateSessionRequestTransaction.builder()
-                    .amount(LogisticsOptionBaseAmount.builder().currency("NOK").value(1000).build())
+                    .amount(Amount.builder().currency("NOK").value(1000).build())
                     .reference(reference)
                     .paymentDescription("CheckoutServiceTests.Can_Create_And_Get_Session")
                     .build())

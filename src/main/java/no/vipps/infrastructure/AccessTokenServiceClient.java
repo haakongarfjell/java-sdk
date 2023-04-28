@@ -13,7 +13,7 @@ public class AccessTokenServiceClient extends BaseServiceClient {
   @Override
   public Headers getHeaders() {
     return Headers.of(
-        new HashMap<>() {
+        new HashMap<String, String>() {
           {
             put(Constants.HEADER_NAME_CLIENT_ID, VippsConfiguration.getInstance().getClientId());
             put(

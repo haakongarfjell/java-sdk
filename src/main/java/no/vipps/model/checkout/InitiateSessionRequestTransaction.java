@@ -27,7 +27,7 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 public class InitiateSessionRequestTransaction {
   /** */
-  private LogisticsOptionBaseAmount amount;
+  private Amount amount;
   /**
    * The merchant&#39;s unique reference for the transaction. Also known as OrderId. Example:
    * \&quot;acme-shop-123-order123abc\&quot;. See

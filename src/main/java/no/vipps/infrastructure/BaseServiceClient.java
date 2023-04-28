@@ -11,8 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public abstract class BaseServiceClient {
   private static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
-  @Getter
-  private final VippsClient vippsHttpClient;
+  @Getter private final VippsClient vippsHttpClient;
   private final Logger logger;
 
   public BaseServiceClient(VippsClient vippsHttpClient) {
@@ -54,11 +53,12 @@ public abstract class BaseServiceClient {
     if (requestBody == null && httpMethod == "POST") {
       requestBody = RequestBody.create("", null);
     }
-    Request request = new Request.Builder()
-        .url(path)
-        .method(httpMethod, requestBody)
-        .headers(getHeaders())
-        .build();
+    Request request =
+        new Request.Builder()
+            .url(path)
+            .method(httpMethod, requestBody)
+            .headers(getHeaders())
+            .build();
     return vippsHttpClient.send(request);
   }
 }

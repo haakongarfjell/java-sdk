@@ -25,7 +25,6 @@ import no.vipps.model.epayment.PaymentMethodType;
 import no.vipps.model.epayment.RefundModificationRequest;
 import no.vipps.model.epayment.State;
 import no.vipps.services.EpaymentService;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -35,15 +34,16 @@ public class EpaymentServiceTests {
 
   @BeforeAll
   public static void Authenticate() {
-    var config = VippsConfigurationOptions.builder()
-        .clientId(System.getenv("CLIENT_ID"))
-        .clientSecret(System.getenv("CLIENT_SECRET"))
-        .subscriptionKey(System.getenv("SUBSCRIPTION_KEY"))
-        .merchantSerialNumber(System.getenv("MERCHANT_SERIAL_NUMBER"))
-        .isUseTestMode(true)
-        .pluginName("Vipps.net.IntegrationTests")
-        .pluginVersion("1.0.0")
-        .build();
+    VippsConfigurationOptions config =
+        VippsConfigurationOptions.builder()
+            .clientId(System.getenv("CLIENT_ID"))
+            .clientSecret(System.getenv("CLIENT_SECRET"))
+            .subscriptionKey(System.getenv("SUBSCRIPTION_KEY"))
+            .merchantSerialNumber(System.getenv("MERCHANT_SERIAL_NUMBER"))
+            .isUseTestMode(true)
+            .pluginName("Vipps.net.IntegrationTests")
+            .pluginVersion("1.0.0")
+            .build();
     VippsConfiguration.getInstance().configureVipps(config, null);
   }
 
@@ -51,7 +51,8 @@ public class EpaymentServiceTests {
   public void testCanCreateGetCancelPayment() throws Exception {
     String reference = UUID.randomUUID().toString();
     CreatePaymentRequest createPaymentRequest = getCreatePaymentRequest(reference);
-    CreatePaymentResponse createPaymentResponse = EpaymentService.createPayment(createPaymentRequest);
+    CreatePaymentResponse createPaymentResponse =
+        EpaymentService.createPayment(createPaymentRequest);
     assertNotNull(createPaymentResponse);
     assertEquals(reference, createPaymentResponse.getReference());
 
@@ -69,7 +70,8 @@ public class EpaymentServiceTests {
   public void testCanCreateApproveCaptureRefundPayment() throws Exception {
     String reference = UUID.randomUUID().toString();
     CreatePaymentRequest createPaymentRequest = getCreatePaymentRequest(reference);
-    CreatePaymentResponse createPaymentResponse = EpaymentService.createPayment(createPaymentRequest);
+    CreatePaymentResponse createPaymentResponse =
+        EpaymentService.createPayment(createPaymentRequest);
 
     assertNotNull(createPaymentResponse);
     assertEquals(reference, createPaymentResponse.getReference());
@@ -80,20 +82,24 @@ public class EpaymentServiceTests {
             .customer(Customer.builder().phoneNumber(CUSTOMER_PHONE_NUMBER).build())
             .build());
 
-    CaptureModificationRequest capturePaymentRequest = CaptureModificationRequest.builder()
-        .modificationAmount(createPaymentRequest.getAmount())
-        .build();
+    CaptureModificationRequest capturePaymentRequest =
+        CaptureModificationRequest.builder()
+            .modificationAmount(createPaymentRequest.getAmount())
+            .build();
 
-    ModificationResponse captureResponse = EpaymentService.capturePayment(reference, capturePaymentRequest);
+    ModificationResponse captureResponse =
+        EpaymentService.capturePayment(reference, capturePaymentRequest);
     assertNotNull(captureResponse);
     assertEquals(reference, captureResponse.getReference());
     assertEquals(State.AUTHORIZED, captureResponse.getState());
 
-    RefundModificationRequest refundPaymentRequest = RefundModificationRequest.builder()
-        .modificationAmount(createPaymentRequest.getAmount())
-        .build();
+    RefundModificationRequest refundPaymentRequest =
+        RefundModificationRequest.builder()
+            .modificationAmount(createPaymentRequest.getAmount())
+            .build();
 
-    ModificationResponse modificationResponse = EpaymentService.refundPayment(reference, refundPaymentRequest);
+    ModificationResponse modificationResponse =
+        EpaymentService.refundPayment(reference, refundPaymentRequest);
     assertNotNull(modificationResponse);
     assertEquals(reference, modificationResponse.getReference());
     assertEquals(State.AUTHORIZED, modificationResponse.getState());

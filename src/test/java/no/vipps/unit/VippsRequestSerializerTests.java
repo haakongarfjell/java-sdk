@@ -14,12 +14,12 @@ import java.util.Map;
 import java.util.UUID;
 import no.vipps.exceptions.VippsTechnicalException;
 import no.vipps.helpers.VippsRequestSerializer;
+import no.vipps.model.checkout.Amount;
 import no.vipps.model.checkout.Elements;
 import no.vipps.model.checkout.InitiateSessionRequest;
 import no.vipps.model.checkout.InitiateSessionRequestConfiguration;
 import no.vipps.model.checkout.InitiateSessionRequestTransaction;
 import no.vipps.model.checkout.InitiateSessionResponse;
-import no.vipps.model.checkout.LogisticsOptionBaseAmount;
 import no.vipps.model.epayment.CreatePaymentRequest;
 import no.vipps.model.epayment.CreatePaymentRequestUserFlow;
 import no.vipps.model.epayment.Currency;
@@ -35,8 +35,7 @@ public class VippsRequestSerializerTests {
         InitiateSessionRequest.builder()
             .transaction(
                 InitiateSessionRequestTransaction.builder()
-                    .amount(
-                        LogisticsOptionBaseAmount.builder().currency("NOK").value(49000).build())
+                    .amount(Amount.builder().currency("NOK").value(49000).build())
                     .paymentDescription("Hei")
                     .build())
             .additionalProperties(
@@ -72,8 +71,7 @@ public class VippsRequestSerializerTests {
         InitiateSessionRequest.builder()
             .transaction(
                 InitiateSessionRequestTransaction.builder()
-                    .amount(
-                        LogisticsOptionBaseAmount.builder().currency("NOK").value(49000).build())
+                    .amount(Amount.builder().currency("NOK").value(49000).build())
                     .paymentDescription("Hei")
                     .build())
             .configuration(
@@ -106,8 +104,7 @@ public class VippsRequestSerializerTests {
         InitiateSessionRequest.builder()
             .transaction(
                 InitiateSessionRequestTransaction.builder()
-                    .amount(
-                        LogisticsOptionBaseAmount.builder().currency("NOK").value(49000).build())
+                    .amount(Amount.builder().currency("NOK").value(49000).build())
                     .paymentDescription("Hei")
                     .build())
             .additionalProperties(
@@ -143,7 +140,7 @@ public class VippsRequestSerializerTests {
     String serializedResponse = objectMapper.writeValueAsString(initiateSessionResponse);
     assertNotNull(serializedResponse);
     assertFalse(serializedResponse.isEmpty());
-    var deserializedResponse =
+    InitiateSessionResponse deserializedResponse =
         VippsRequestSerializer.deserializeVippsResponse(
             serializedResponse, InitiateSessionResponse.class);
 
@@ -167,7 +164,7 @@ public class VippsRequestSerializerTests {
     String serializedResponse = objectMapper.writeValueAsString(initiateSessionResponse);
     assertNotNull(serializedResponse);
     assertFalse(serializedResponse.isEmpty());
-    var deserializedResponse =
+    InitiateSessionResponse deserializedResponse =
         VippsRequestSerializer.deserializeVippsResponse(
             serializedResponse, InitiateSessionResponse.class);
 
@@ -198,7 +195,7 @@ public class VippsRequestSerializerTests {
     String serializedResponse = objectMapper.writeValueAsString(initiateSessionResponse);
     assertNotNull(serializedResponse);
     assertFalse(serializedResponse.isEmpty());
-    var deserializedResponse =
+    InitiateSessionResponse deserializedResponse =
         VippsRequestSerializer.deserializeVippsResponse(
             serializedResponse, InitiateSessionResponse.class);
     Map<String, Object> epayment =
