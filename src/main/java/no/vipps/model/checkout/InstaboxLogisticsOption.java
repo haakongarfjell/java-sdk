@@ -31,7 +31,7 @@ public class InstaboxLogisticsOption {
   /** */
   private String customType;
   /** */
-  private String brand = "INSTABOX";
+  @Builder.Default private String brand = "INSTABOX";
   /** */
   private LogisticsOptionBaseAmount amount;
   /** */

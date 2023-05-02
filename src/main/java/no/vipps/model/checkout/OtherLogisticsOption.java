@@ -29,7 +29,7 @@ public class OtherLogisticsOption {
   /** */
   private String title;
   /** */
-  private String brand = "OTHER";
+  @Builder.Default private String brand = "OTHER";
   /** */
   private LogisticsOptionBaseAmount amount;
   /** */

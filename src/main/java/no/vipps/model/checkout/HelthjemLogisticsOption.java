@@ -31,7 +31,7 @@ public class HelthjemLogisticsOption {
   /** */
   private String customType;
   /** */
-  private String brand = "HELTHJEM";
+  @Builder.Default private String brand = "HELTHJEM";
   /** */
   private LogisticsOptionBaseAmount amount;
   /** */

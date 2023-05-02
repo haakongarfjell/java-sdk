@@ -32,5 +32,5 @@ public class Countries {
    * List of allowed countries in ISO-3166 Alpha 2. If specified, the customer will only be able to
    * select these countries. Example [\&quot;NO\&quot;, \&quot;SE\&quot;, \&quot;DK\&quot;]
    */
-  private List<String> supported = new ArrayList<>();
+  @Builder.Default private List<String> supported = new ArrayList<>();
 }

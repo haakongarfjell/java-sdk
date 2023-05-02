@@ -31,7 +31,7 @@ public class PorterbuddyLogisticsOption {
   /** */
   private String customType;
   /** */
-  private String brand = "PORTERBUDDY";
+  @Builder.Default private String brand = "PORTERBUDDY";
   /** */
   private LogisticsOptionBaseAmount amount;
   /** */

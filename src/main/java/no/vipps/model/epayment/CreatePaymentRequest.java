@@ -40,7 +40,7 @@ public class CreatePaymentRequest {
    * For special cases. The sales unit must be configured by Vipps. We strongly recommend using
    * \&quot;reserve capture\&quot; in all situations. Default is &#x60;false&#x60;.
    */
-  private Boolean directCapture = false;
+  @Builder.Default private Boolean directCapture = false;
   /** */
   private Customer customer;
   /**
@@ -48,6 +48,7 @@ public class CreatePaymentRequest {
    * that the customer is physically present at the point of sale when the payment is made,
    * typically in a store.
    */
+  @Builder.Default
   private CustomerInteraction customerInteraction = CustomerInteraction.CUSTOMER_NOT_PRESENT;
   /** */
   private IndustryData industryData;

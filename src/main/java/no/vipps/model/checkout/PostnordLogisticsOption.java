@@ -31,7 +31,7 @@ public class PostnordLogisticsOption {
   /** */
   private String customType;
   /** */
-  private String brand = "POSTNORD";
+  @Builder.Default private String brand = "POSTNORD";
   /** */
   private LogisticsOptionBaseAmount amount;
   /** */
