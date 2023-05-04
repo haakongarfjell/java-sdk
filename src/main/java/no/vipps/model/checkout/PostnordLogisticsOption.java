@@ -13,7 +13,6 @@
 package no.vipps.model.checkout;
 
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
@@ -21,11 +20,10 @@ import lombok.extern.jackson.Jacksonized;
 /** PostnordLogisticsOption. */
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 @Jacksonized
-@EqualsAndHashCode
 @Getter
 @ToString
 @Builder
-public class PostnordLogisticsOption {
+public class PostnordLogisticsOption extends LogisticsFixedOptionsInner {
   /** */
   private PostnordLogisticsType type;
   /** */

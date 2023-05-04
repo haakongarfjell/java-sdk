@@ -17,11 +17,11 @@ package no.vipps.model.checkout;
 public enum PaymentMethod {
 
   /** &quot;Wallet&quot; */
-  WALLET,
+  Wallet,
 
   /** &quot;Card&quot; */
-  CARD,
+  Card,
 
   /** &quot;Swish&quot; */
-  SWISH,
+  Swish,
 }
