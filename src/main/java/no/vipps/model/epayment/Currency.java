@@ -17,9 +17,8 @@ package no.vipps.model.epayment;
  *
  * <p>Currency code as defined in ISO 4217. eg NOK for Norwegian kroner.
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public enum Currency {
 
-  /** &quot;NOK&quot; */
+  /** "NOK" */
   NOK,
 }

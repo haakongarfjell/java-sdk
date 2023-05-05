@@ -23,7 +23,6 @@ import lombok.extern.jackson.Jacksonized;
  *
  * <p>Amount object
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 @Jacksonized
 @EqualsAndHashCode
 @Getter

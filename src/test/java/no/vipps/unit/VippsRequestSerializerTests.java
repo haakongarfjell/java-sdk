@@ -76,7 +76,7 @@ public class VippsRequestSerializerTests {
                     .build())
             .configuration(
                 InitiateSessionRequestConfiguration.builder()
-                    .elements(Elements.PAYMENTONLY)
+                    .elements(Elements.PaymentOnly)
                     .build())
             .additionalProperties(
                 Map.of(

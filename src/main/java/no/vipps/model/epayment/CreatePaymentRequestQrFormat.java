@@ -24,7 +24,6 @@ import lombok.extern.jackson.Jacksonized;
  * <p>Optional setting that is only applicable when &#x60;userFlow&#x60; is set to &#x60;QR&#x60;.
  * This is used to set the format for the QR code.
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 @Jacksonized
 @EqualsAndHashCode
 @Getter

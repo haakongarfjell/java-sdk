@@ -27,7 +27,6 @@ import lombok.extern.jackson.Jacksonized;
  *
  * <p>The &#x60;CreatePaymentRequest&#x60; object.
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 @Jacksonized
 @EqualsAndHashCode
 @Getter
@@ -38,7 +37,7 @@ public class CreatePaymentRequest {
   private Amount amount;
   /**
    * For special cases. The sales unit must be configured by Vipps. We strongly recommend using
-   * \&quot;reserve capture\&quot; in all situations. Default is &#x60;false&#x60;.
+   * "reserve capture" in all situations. Default is &#x60;false&#x60;.
    */
   @Builder.Default private Boolean directCapture = false;
   /** */

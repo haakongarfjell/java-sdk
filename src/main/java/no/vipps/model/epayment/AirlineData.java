@@ -24,7 +24,6 @@ import lombok.extern.jackson.Jacksonized;
  * <p>Airline related data. If present, &#x60;passengerName&#x60;, &#x60;airlineCode&#x60;,
  * &#x60;airlineDesignatorCode&#x60;, and &#x60;agencyInvoiceNumber&#x60; are all required.
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 @Jacksonized
 @EqualsAndHashCode
 @Getter

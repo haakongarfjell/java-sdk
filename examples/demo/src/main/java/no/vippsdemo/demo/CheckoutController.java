@@ -22,8 +22,7 @@ import no.vipps.model.checkout.InitiateSessionRequestLogistics;
 import no.vipps.model.checkout.InitiateSessionRequestMerchantInfo;
 import no.vipps.model.checkout.InitiateSessionRequestTransaction;
 import no.vipps.model.checkout.InitiateSessionResponse;
-import no.vipps.model.checkout.LogisticsFixedOptionsInner;
-import no.vipps.model.checkout.LogisticsOptionBaseAmount;
+import no.vipps.model.checkout.LogisticsOptionBase;
 import no.vipps.model.checkout.PostenLogisticsOption;
 import no.vipps.model.checkout.PostenLogisticsType;
 import no.vipps.model.checkout.PostnordLogisticsOption;
@@ -83,18 +82,18 @@ public class CheckoutController {
     return "ordercomplete";
   }
 
-  private List<LogisticsFixedOptionsInner> getFixedOptions() {
+  private List<LogisticsOptionBase> getFixedOptions() {
     PostenLogisticsOption postenOption = PostenLogisticsOption.builder()
         .id("shippingoption-posten-mailbox")
-        .amount(LogisticsOptionBaseAmount.builder().value(1000).currency("NOK").build())
+        .amount(Amount.builder().value(1000).currency("NOK").build())
         .type(PostenLogisticsType.MAILBOX)
         .build();
     PostnordLogisticsOption postNordOption = PostnordLogisticsOption.builder()
         .id("shippingoption-postnord-pickup")
-        .amount(LogisticsOptionBaseAmount.builder().value(1000).currency("NOK").build())
+        .amount(Amount.builder().value(1000).currency("NOK").build())
         .type(PostnordLogisticsType.PICKUP_POINT)
         .build();
-    List<LogisticsFixedOptionsInner> options = new ArrayList<>();
+    List<LogisticsOptionBase> options = new ArrayList<>();
     options.add(postenOption);
     options.add(postNordOption);
     return options;

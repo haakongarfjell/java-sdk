@@ -19,7 +19,6 @@ import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 
 /** Aggregate. */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 @Jacksonized
 @EqualsAndHashCode
 @Getter

@@ -20,7 +20,6 @@ import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 
 /** PaymentEvent. */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 @Jacksonized
 @EqualsAndHashCode
 @Getter

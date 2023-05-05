@@ -23,7 +23,6 @@ import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 
 /** ProfileResponse. */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 @Jacksonized
 @EqualsAndHashCode
 @Getter

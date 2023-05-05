@@ -20,21 +20,20 @@ package no.vipps.model.epayment;
  * within the payment expiration time - AUTHORIZED : User has approved the payment - TERMINATED :
  * Merchant has terminated the payment via the cancelPayment endpoint
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public enum State {
 
-  /** &quot;CREATED&quot; */
+  /** "CREATED" */
   CREATED,
 
-  /** &quot;ABORTED&quot; */
+  /** "ABORTED" */
   ABORTED,
 
-  /** &quot;EXPIRED&quot; */
+  /** "EXPIRED" */
   EXPIRED,
 
-  /** &quot;AUTHORIZED&quot; */
+  /** "AUTHORIZED" */
   AUTHORIZED,
 
-  /** &quot;TERMINATED&quot; */
+  /** "TERMINATED" */
   TERMINATED,
 }

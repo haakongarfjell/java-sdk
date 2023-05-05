@@ -18,12 +18,11 @@ package no.vipps.model.epayment;
  * <p>The paymentMethod type to be performed. &#x60;CARD&#x60; has to be combined with a
  * &#x60;userFlow&#x60; of &#x60;WEB_REDIRECT&#x60;.
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public enum PaymentMethodType {
 
-  /** &quot;WALLET&quot; */
+  /** "WALLET" */
   WALLET,
 
-  /** &quot;CARD&quot; */
+  /** "CARD" */
   CARD,
 }

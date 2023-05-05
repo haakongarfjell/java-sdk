@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 import org.openapitools.jackson.nullable.JsonNullableModule;
 
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class JSON implements ContextResolver<ObjectMapper> {
   private ObjectMapper mapper;
 

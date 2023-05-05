@@ -23,7 +23,6 @@ import lombok.extern.jackson.Jacksonized;
  *
  * <p>Additional compliance data related to the transaction.
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 @Jacksonized
 @EqualsAndHashCode
 @Getter

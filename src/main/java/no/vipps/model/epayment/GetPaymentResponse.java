@@ -28,7 +28,6 @@ import lombok.extern.jackson.Jacksonized;
  *
  * <p>The &#x60;GetPaymentResponse&#x60; object.
  */
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 @Jacksonized
 @EqualsAndHashCode
 @Getter
