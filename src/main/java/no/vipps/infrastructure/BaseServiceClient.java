@@ -6,17 +6,13 @@ import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class BaseServiceClient {
   private static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
   @Getter private final VippsClient vippsHttpClient;
-  private final Logger logger;
 
   public BaseServiceClient(VippsClient vippsHttpClient) {
     this.vippsHttpClient = vippsHttpClient;
-    this.logger = LoggerFactory.getLogger(this.getClass());
   }
 
   private static <T> RequestBody createRequestBody(T request) {

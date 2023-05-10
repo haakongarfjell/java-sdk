@@ -7,7 +7,33 @@ draft: true
 
 # Java SDK
 
-💥 DRAFT! Work in progress. 💥
+## How to install
+
+Add the Maven repository for this package.
+
+For Gradle, add it to the repositories section of build.gradle:
+
+```
+repositories {
+	...
+    maven {
+        url = "https://maven.pkg.github.com/vippsas/java-sdk"
+    }
+}
+```
+
+For Maven, add it inside the <project> tag of pom.xml:
+
+```
+<repositories>
+    ...
+    <repository>
+        <id>github-vippsas-java-sdk</id>
+        <name>Github vippsas java-sdk</name>
+        <url>https://maven.pkg.github.com/vippsas/java-sdk</url>
+    </repository>
+</repositories>
+```
 
 ## Prerequisites
 
@@ -19,6 +45,14 @@ Enable Gradle and Lombok support in your IDE.
 The language level of the project is Java 8. The project uses Gradle as a build tool.
 To build the project, run `./gradlew build`, or use the Gradle wrapper in your IDE.
 
+## Publishing
+
+To publish a new version of the SDK, update the VERSION_NAME property in gradle.properties and then run the "Test and publish package" Github action. To run from CLI:
+
+```
+gh workflow run "Test and publish package" --ref main
+```
+
 ## Formatting
 
 The project uses Google's Java code style with Spotless.
@@ -29,9 +63,7 @@ Auto-generated models were used as a base. They were then manually edited to fit
 
 To generate new models, run the `generateSwaggerCode` and `postProcessSwaggerCode` Gradle tasks.
 
-This shouldn't be done unless the API specifications get a new major version. The generated model will require manual clean up, depending on the specification.
-
-For minor/patch versions, the models should be edited manually.
+This should generally not be done as the auto-generated models have been modified extensively by hand.
 
 ## Licensing
 

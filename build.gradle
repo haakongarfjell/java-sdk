@@ -8,6 +8,7 @@ import java.util.regex.Matcher
 plugins {
     id 'java'
     id 'java-library'
+    id 'maven-publish'
     id 'org.hidetake.swagger.generator' version '2.19.2'
     id 'io.freefair.lombok' version '8.0.0-rc2'
     id 'com.diffplug.spotless' version '6.18.0'
@@ -33,7 +34,6 @@ dependencies {
     implementation platform('com.squareup.okhttp3:okhttp-bom:4.10.0')
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
-    implementation 'org.slf4j:slf4j-api:2.0.6'
     implementation 'jakarta.ws.rs:jakarta.ws.rs-api:3.1.0'
     implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     implementation 'io.swagger:swagger-annotations:1.6.9'
@@ -118,6 +118,24 @@ tasks.register("postProcessSwaggerCode") {
                             file.toFile().text = modifiedContent
                 }
             }
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/vippsas/java-sdk")
+            credentials {
+                username = System.getenv("PUBLISH_USERNAME")
+                password = System.getenv("PUBLISH_TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
         }
     }
 }

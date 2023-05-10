@@ -6,10 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import jakarta.ws.rs.Consumes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +32,7 @@ import no.vipps.services.CheckoutService;
 @Controller
 public class CheckoutController {
 
-  @PostMapping("/checkout")
-  @Consumes(MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(value = "/checkout", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
   @ResponseBody
   public InitiateSessionResponse checkout(@RequestBody StartCheckoutRequest body) {
     VippsConfigurationOptions config = VippsConfigurationOptions.builder()

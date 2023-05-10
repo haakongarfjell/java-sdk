@@ -10,11 +10,8 @@ import no.vipps.model.epayment.GetPaymentResponse;
 import no.vipps.model.epayment.ModificationResponse;
 import no.vipps.model.epayment.PaymentEvent;
 import no.vipps.model.epayment.RefundModificationRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class EpaymentService {
-  private static Logger logger = LoggerFactory.getLogger(EpaymentService.class);
 
   public static CreatePaymentResponse createPayment(CreatePaymentRequest createPaymentRequest) {
     return VippsServices.getEpaymentServiceClient()
