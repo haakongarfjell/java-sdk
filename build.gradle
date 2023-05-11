@@ -103,25 +103,6 @@ swaggerSources {
     }
 }
 
-tasks.register("postProcessSwaggerCode") {
-    dependsOn("generateSwaggerCode")
-    doLast {
-        def outputDirectory = "./build"
-        def enumSuffixPattern = Pattern.compile("(private\\s+)(\\w+)Enum(\\s+\\w+(\\s*=\\s*.+)?;)")
-
-        Files.walk(Path.of(outputDirectory)).each { path ->
-            if (path.toFile().isFile() && path.fileName.toString().endsWith(".java")) {
-                def fileContent = file.toFile().text
-                def matcher = enumSuffixPattern.matcher(fileContent)
-                if (matcher.find()) {
-                    def modifiedContent = matcher.replaceAll('$1$2$3')
-                            file.toFile().text = modifiedContent
-                }
-            }
-        }
-    }
-}
-
 publishing {
     repositories {
         maven {
