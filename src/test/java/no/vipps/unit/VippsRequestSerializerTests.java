@@ -1,17 +1,9 @@
 package no.vipps.unit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import java.util.Map;
-import java.util.UUID;
 import no.vipps.exceptions.VippsTechnicalException;
 import no.vipps.helpers.VippsRequestSerializer;
 import no.vipps.model.checkout.Amount;
@@ -27,10 +19,20 @@ import no.vipps.model.epayment.PaymentMethod;
 import no.vipps.model.epayment.PaymentMethodType;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class VippsRequestSerializerTests {
 
   @Test
-  public void canSerializeWithNestedExtraParameters() throws JsonProcessingException {
+  public void serialize_with_nested_extra_parameters() throws JsonProcessingException {
     InitiateSessionRequest initiateSessionRequest =
         InitiateSessionRequest.builder()
             .transaction(
@@ -39,7 +41,7 @@ public class VippsRequestSerializerTests {
                     .paymentDescription("Hei")
                     .build())
             .additionalProperties(
-                Map.of("Transaction", Map.of("Metadata", Map.of("KID", "100001"))))
+                map("Transaction", map("Metadata", map("KID", "100001"))))
             .build();
 
     String serializedRequest = VippsRequestSerializer.serializeVippsRequest(initiateSessionRequest);
@@ -66,7 +68,7 @@ public class VippsRequestSerializerTests {
   }
 
   @Test
-  public void canSerializeWithExtraParametersArray() throws JsonProcessingException {
+  public void serialize_with_extra_parameters_array() throws JsonProcessingException {
     InitiateSessionRequest initiateSessionRequest =
         InitiateSessionRequest.builder()
             .transaction(
@@ -79,9 +81,9 @@ public class VippsRequestSerializerTests {
                     .elements(Elements.PaymentOnly)
                     .build())
             .additionalProperties(
-                Map.of(
+                map(
                     "Configuration",
-                    Map.of("AcceptedPaymentMethods", new String[] {"WALLET", "CARD"})))
+                    map("AcceptedPaymentMethods", new String[] {"WALLET", "CARD"})))
             .build();
 
     String serializedRequest = VippsRequestSerializer.serializeVippsRequest(initiateSessionRequest);
@@ -99,7 +101,7 @@ public class VippsRequestSerializerTests {
   }
 
   @Test
-  public void canSerializeWithExtraParametersOnUndefinedReceiver() throws JsonProcessingException {
+  public void serialize_with_extra_parameters_on_undefined_receiver() throws JsonProcessingException {
     InitiateSessionRequest initiateSessionRequest =
         InitiateSessionRequest.builder()
             .transaction(
@@ -108,9 +110,9 @@ public class VippsRequestSerializerTests {
                     .paymentDescription("Hei")
                     .build())
             .additionalProperties(
-                Map.of(
+                map(
                     "Configuration",
-                    Map.of("AcceptedPaymentMethods", new String[] {"WALLET", "CARD"})))
+                    map("AcceptedPaymentMethods", new String[] {"WALLET", "CARD"})))
             .build();
 
     String serializedRequest = VippsRequestSerializer.serializeVippsRequest(initiateSessionRequest);
@@ -128,7 +130,7 @@ public class VippsRequestSerializerTests {
   }
 
   @Test
-  public void canDeserializeResponseWithoutExtraProperties() throws JsonProcessingException {
+  public void deserialize_response_without_extra_properties() throws JsonProcessingException {
     InitiateSessionResponse initiateSessionResponse =
         InitiateSessionResponse.builder()
             .checkoutFrontendUrl("https://vipps.no/checkout-frontend")
@@ -148,9 +150,9 @@ public class VippsRequestSerializerTests {
   }
 
   @Test
-  public void canDeserializeResponseWithExtraProperties() throws JsonProcessingException {
+  public void deserialize_response_with_extra_properties() throws JsonProcessingException {
     Map<String, String> initiateSessionResponse =
-        Map.of(
+        map(
             "checkoutFrontendUrl",
             "https://vipps.no/checkout-frontend",
             "pollingUrl",
@@ -175,9 +177,9 @@ public class VippsRequestSerializerTests {
   }
 
   @Test
-  public void canDeserializeResponseWithNestedExtraProperties() throws JsonProcessingException {
+  public void deserialize_response_with_nested_extra_properties() throws JsonProcessingException {
     Map<String, Object> initiateSessionResponse =
-        Map.of(
+        map(
             "checkoutFrontendUrl",
             "https://vipps.no/checkout-frontend",
             "pollingUrl",
@@ -185,7 +187,7 @@ public class VippsRequestSerializerTests {
             "token",
             "eynghsvdsjhkfgasf",
             "epayment",
-            Map.of(
+            map(
                 "pollingUrl",
                 "https://api.vipps.no/checkout/v3/session/reference101",
                 "captureUrl",
@@ -209,7 +211,7 @@ public class VippsRequestSerializerTests {
   }
 
   @Test
-  public void deserializationGivenInvalidDataThrowsException() {
+  public void deserialization_given_invalid_data_throws_exception() {
     assertThrows(
         VippsTechnicalException.class,
         () -> {
@@ -218,10 +220,10 @@ public class VippsRequestSerializerTests {
   }
 
   @Test
-  public void canDeserializeResponseWithExtraPropertiesEpayment() throws JsonProcessingException {
+  public void deserialize_response_with_extra_properties_epayment() throws JsonProcessingException {
     String cancellationUrl = "https://api.vipps.no/checkout/v3/session/reference101/cancel";
     Map<String, Object> createPaymentRequest =
-        Map.of(
+        map(
             "Amount",
             no.vipps.model.epayment.Amount.builder().currency(Currency.NOK).value(1000L).build(),
             "PaymentMethod",
@@ -247,7 +249,7 @@ public class VippsRequestSerializerTests {
   }
 
   @Test
-  public void canSerializeResponseWithExtraPropertiesEpayment() throws JsonProcessingException {
+  public void serialize_response_with_extra_properties_epayment() throws JsonProcessingException {
     String kid = "100001";
     CreatePaymentRequest createPaymentRequest =
         CreatePaymentRequest.builder()
@@ -259,11 +261,51 @@ public class VippsRequestSerializerTests {
             .paymentMethod(PaymentMethod.builder().type(PaymentMethodType.WALLET).build())
             .reference(UUID.randomUUID().toString())
             .userFlow(CreatePaymentRequestUserFlow.WEB_REDIRECT)
-            .additionalProperties(Map.of("Transaction", Map.of("Metadata", Map.of("KID", kid))))
+            .additionalProperties(map("Transaction", map("Metadata", map("KID", kid))))
             .build();
 
     ObjectMapper objectMapper = new ObjectMapper();
     String serializedRequest = objectMapper.writeValueAsString(createPaymentRequest);
     assertNotNull(serializedRequest);
+  }
+
+  private static <K, V> Map<K, V> map(K k1, V v1) {
+    return new HashMap<K, V>() {
+      {
+        put(k1, v1);
+      }
+    };
+  }
+
+  private static <K, V> Map<K, V> map(K k1, V v1, K k2, V v2) {
+    return new HashMap<K, V>() {
+      {
+        put(k1, v1);
+        put(k2, v2);
+      }
+    };
+  }
+
+  private static <K, V> Map<K, V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+    return new HashMap<K, V>() {
+      {
+        put(k1, v1);
+        put(k2, v2);
+        put(k3, v3);
+        put(k4, v4);
+      }
+    };
+  }
+
+  private static <K, V> Map<K, V> map(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
+    return new HashMap<K, V>() {
+      {
+        put(k1, v1);
+        put(k2, v2);
+        put(k3, v3);
+        put(k4, v4);
+        put(k5, v5);
+      }
+    };
   }
 }

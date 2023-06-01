@@ -5,8 +5,8 @@ import no.vipps.exceptions.VippsUserException;
 public class VippsConfiguration {
 
   private static VippsConfiguration INSTANCE;
-  private String systemName = "Vipps Java SDK";
-  private String systemVersion = "1.0";
+  private final String systemName = "Vipps Java SDK";
+  private final String systemVersion = "1.0";
   private String pluginName;
   private String pluginVersion;
   private String clientId;

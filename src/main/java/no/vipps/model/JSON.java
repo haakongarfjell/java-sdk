@@ -10,15 +10,16 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.ext.ContextResolver;
+import org.openapitools.jackson.nullable.JsonNullableModule;
+
 import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.openapitools.jackson.nullable.JsonNullableModule;
 
 public class JSON implements ContextResolver<ObjectMapper> {
-  private ObjectMapper mapper;
+  private final ObjectMapper mapper;
 
   public JSON() {
     mapper = new ObjectMapper();
@@ -106,9 +107,7 @@ public class JSON implements ContextResolver<ObjectMapper> {
         node = node.get(discriminatorName);
         if (node != null && node.isValueNode()) {
           String discrValue = node.asText();
-          if (discrValue != null) {
-            return discrValue;
-          }
+          return discrValue;
         }
       }
       return null;
@@ -194,11 +193,11 @@ public class JSON implements ContextResolver<ObjectMapper> {
   }
 
   /** A map of discriminators for all model classes. */
-  private static Map<Class<?>, ClassDiscriminatorMapping> modelDiscriminators =
+  private static final Map<Class<?>, ClassDiscriminatorMapping> modelDiscriminators =
       new HashMap<Class<?>, ClassDiscriminatorMapping>();
 
   /** A map of oneOf/anyOf descendants for each model class. */
-  private static Map<Class<?>, Map<String, GenericType>> modelDescendants =
+  private static final Map<Class<?>, Map<String, GenericType>> modelDescendants =
       new HashMap<Class<?>, Map<String, GenericType>>();
 
   /**

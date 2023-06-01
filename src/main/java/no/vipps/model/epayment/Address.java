@@ -12,13 +12,14 @@
 
 package no.vipps.model.epayment;
 
-import java.util.List;
-import java.util.UUID;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
+
+import java.util.List;
+import java.util.UUID;
 
 /** Address. */
 @Jacksonized

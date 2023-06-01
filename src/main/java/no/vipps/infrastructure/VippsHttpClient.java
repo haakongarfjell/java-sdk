@@ -1,27 +1,25 @@
 package no.vipps.infrastructure;
 
-import java.io.IOException;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import no.vipps.exceptions.VippsTechnicalException;
+import okhttp3.Call;
 import okhttp3.Headers;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import java.io.IOException;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+
 public class VippsHttpClient implements VippsClient {
 
   private static final Duration DEFAULT_TIMEOUT = Duration.of(100, ChronoUnit.SECONDS);
-  private OkHttpClient httpClient = null;
+  private OkHttpClient httpClient;
 
   public VippsHttpClient() {
     this.httpClient = createDefaultOkHttpClient();
-  }
-
-  public VippsHttpClient(OkHttpClient httpClient) {
-    this.httpClient = httpClient;
   }
 
   private static Headers getHeaders() {
@@ -60,28 +58,36 @@ public class VippsHttpClient implements VippsClient {
     }
   }
 
-  private OkHttpClient createDefaultOkHttpClient() {
-    OkHttpClient client =
-        new OkHttpClient.Builder()
-            .retryOnConnectionFailure(true)
-            .connectTimeout(DEFAULT_TIMEOUT)
-            .addInterceptor(
-                new Interceptor() {
-                  @Override
-                  public Response intercept(Chain chain) throws IOException {
-                    Request request = chain.request();
-                    Response response = chain.proceed(request);
-                    int tryCount = 0;
-                    while (response.code() >= 500 && tryCount < 3) {
-                      tryCount++;
-                      response.close();
-                      response = chain.proceed(request);
-                    }
-                    return response;
-                  }
-                })
+  @Override
+  public CompletableFuture<String> sendAsync(Request request) throws VippsTechnicalException {
+    Request modifiedRequest =
+        request
+            .newBuilder()
+            .headers(request.headers().newBuilder().addAll(getHeaders()).build())
             .build();
 
-    return client;
+    Call call = httpClient.newCall(modifiedRequest);
+    VippsHttpCallbackFuture future = new VippsHttpCallbackFuture(call);
+    call.enqueue(future);
+    return future;
+  }
+
+  private OkHttpClient createDefaultOkHttpClient() {
+    return new OkHttpClient.Builder()
+        .retryOnConnectionFailure(true)
+        .connectTimeout(DEFAULT_TIMEOUT)
+        .addInterceptor(
+            chain -> {
+              Request request = chain.request();
+              Response response = chain.proceed(request);
+              int tryCount = 0;
+              while (response.code() >= 500 && tryCount < 3) {
+                tryCount++;
+                response.close();
+                response = chain.proceed(request);
+              }
+              return response;
+            })
+        .build();
   }
 }

@@ -14,6 +14,7 @@ package no.vipps.model.epayment;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.ws.rs.core.GenericType;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -24,7 +25,7 @@ public abstract class AbstractOpenApiSchema {
   private Object instance;
 
   // is nullable
-  private Boolean isNullable;
+  private final Boolean isNullable;
 
   // schema type (e.g. oneOf, anyOf)
   private final String schemaType;
@@ -91,13 +92,11 @@ public abstract class AbstractOpenApiSchema {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class ").append(getClass()).append(" {\n");
-    sb.append("    instance: ").append(toIndentedString(instance)).append("\n");
-    sb.append("    isNullable: ").append(toIndentedString(isNullable)).append("\n");
-    sb.append("    schemaType: ").append(toIndentedString(schemaType)).append("\n");
-    sb.append("}");
-    return sb.toString();
+    return "class " + getClass() + " {\n" +
+        "    instance: " + toIndentedString(instance) + "\n" +
+        "    isNullable: " + toIndentedString(isNullable) + "\n" +
+        "    schemaType: " + toIndentedString(schemaType) + "\n" +
+        "}";
   }
 
   /**

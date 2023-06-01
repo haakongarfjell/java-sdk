@@ -1,24 +1,25 @@
 package no.vipps.unit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import no.vipps.model.accesstoken.AccessToken;
+import no.vipps.services.AccessTokenCacheService;
+import org.junit.jupiter.api.Test;
+
+import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
-import javax.crypto.spec.SecretKeySpec;
-import no.vipps.model.accesstoken.AccessToken;
-import no.vipps.services.AccessTokenCacheService;
-import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class AccessTokenCacheServiceTests {
   @Test
-  public void canRetrieveSavedValid() {
+  public void can_retrieve_saved_valid() {
     String key = UUID.randomUUID().toString();
     AccessToken accessToken =
         getToken(getInstantSubtract(1, ChronoUnit.HOURS), getInstantAdd(1, ChronoUnit.HOURS));
@@ -28,7 +29,7 @@ public class AccessTokenCacheServiceTests {
   }
 
   @Test
-  public void canNotRetrieveSavedExpired() {
+  public void can_not_retrieve_saved_expired() {
     String key = UUID.randomUUID().toString();
     AccessToken accessToken =
         getToken(
@@ -40,7 +41,7 @@ public class AccessTokenCacheServiceTests {
   }
 
   @Test
-  public void canNotRetrieveSavedNotValidForLongEnough() {
+  public void can_not_retrieve_saved_not_valid_for_long_enough() {
     String key = UUID.randomUUID().toString();
     AccessToken accessToken =
         getToken(getInstantSubtract(2, ChronoUnit.HOURS), getInstantAdd(1, ChronoUnit.MINUTES));

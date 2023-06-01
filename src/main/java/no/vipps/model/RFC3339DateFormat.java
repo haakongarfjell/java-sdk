@@ -13,6 +13,7 @@
 package no.vipps.model;
 
 import com.fasterxml.jackson.databind.util.StdDateFormat;
+
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;

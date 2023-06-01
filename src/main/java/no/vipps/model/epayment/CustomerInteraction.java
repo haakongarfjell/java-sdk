@@ -4,7 +4,7 @@ public enum CustomerInteraction {
   CUSTOMER_PRESENT("CUSTOMER_PRESENT"),
   CUSTOMER_NOT_PRESENT("CUSTOMER_NOT_PRESENT");
 
-  private String value;
+  private final String value;
 
   CustomerInteraction(String value) {
     this.value = value;

@@ -12,12 +12,13 @@
 
 package no.vipps.model.epayment;
 
-import java.time.OffsetDateTime;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
+
+import java.time.OffsetDateTime;
 
 /** PaymentEvent. */
 @Jacksonized

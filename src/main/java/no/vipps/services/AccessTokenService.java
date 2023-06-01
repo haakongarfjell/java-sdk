@@ -1,8 +1,11 @@
 package no.vipps.services;
 
+import no.vipps.infrastructure.AccessTokenServiceClient;
 import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsServices;
 import no.vipps.model.accesstoken.AccessToken;
+
+import java.util.concurrent.CompletableFuture;
 
 public class AccessTokenService {
 
@@ -23,5 +26,29 @@ public class AccessTokenService {
 
     AccessTokenCacheService.put(key, accessToken);
     return accessToken;
+  }
+
+  public static CompletableFuture<AccessToken> getAccessTokenAsync() {
+    String key = VippsConfiguration.getInstance().getClientId()
+        + VippsConfiguration.getInstance().getClientSecret();
+
+    return CompletableFuture
+        .supplyAsync(() -> AccessTokenCacheService.get(key))
+        .thenCompose(cachedToken -> {
+          if (cachedToken != null) {
+            return CompletableFuture.completedFuture(cachedToken);
+          }
+
+          String requestPath = VippsConfiguration.getInstance().getBaseUrl() + "/accesstoken/get";
+
+          CompletableFuture<AccessToken> accessTokenCompletableFuture = VippsServices.getAccessTokenServiceClient()
+              .executeRequestAsync(requestPath, "POST", "", AccessToken.class);
+
+          accessTokenCompletableFuture.thenAccept((accessToken) -> {
+            AccessTokenCacheService.put(key, accessToken);
+          });
+
+          return accessTokenCompletableFuture;
+        });
   }
 }

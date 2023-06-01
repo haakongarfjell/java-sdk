@@ -1,5 +1,8 @@
 package no.vipps.services;
 
+import no.vipps.exceptions.VippsTechnicalException;
+import no.vipps.model.accesstoken.AccessToken;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,8 +12,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import no.vipps.exceptions.VippsTechnicalException;
-import no.vipps.model.accesstoken.AccessToken;
 
 public class AccessTokenCacheService {
 
@@ -26,7 +27,7 @@ public class AccessTokenCacheService {
         Instant.ofEpochSecond(Long.parseLong(token.getExpiresOn())).atOffset(ZoneOffset.UTC);
     OffsetDateTime tokenValidToWithBackoff = tokenValidTo.minus(BACKOFF_DURATION);
 
-    if (tokenValidToWithBackoff != null && tokenValidToWithBackoff.isAfter(OffsetDateTime.now())) {
+    if (tokenValidToWithBackoff.isAfter(OffsetDateTime.now())) {
       CACHE.put(
           getPrefixedHashedKey(key), new AccessTokenCacheEntry(token, tokenValidToWithBackoff));
     }

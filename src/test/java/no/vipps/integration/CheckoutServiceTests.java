@@ -1,9 +1,5 @@
 package no.vipps.integration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.util.UUID;
 import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.checkout.Amount;
@@ -17,10 +13,17 @@ import no.vipps.services.CheckoutService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 public class CheckoutServiceTests {
 
   @BeforeAll
-  public static void Authenticate() {
+  public static void authenticate() {
     VippsConfigurationOptions config =
         VippsConfigurationOptions.builder()
             .clientId(System.getenv("CLIENT_ID"))
@@ -35,7 +38,7 @@ public class CheckoutServiceTests {
   }
 
   @Test
-  public void testCanCreateAndGetSession() {
+  public void can_create_and_get_session() {
     String reference = UUID.randomUUID().toString();
     InitiateSessionRequest sessionInitiationRequest =
         InitiateSessionRequest.builder()
@@ -60,5 +63,32 @@ public class CheckoutServiceTests {
 
     SessionResponse sessionPolledResponse = CheckoutService.getSessionInfo(reference);
     assertEquals(ExternalSessionState.SessionCreated, sessionPolledResponse.getSessionState());
+  }
+
+  @Test
+  public void can_create_and_get_session_async() throws ExecutionException, InterruptedException {
+    String reference = UUID.randomUUID().toString();
+    InitiateSessionRequest sessionInitiationRequest =
+        InitiateSessionRequest.builder()
+            .transaction(
+                InitiateSessionRequestTransaction.builder()
+                    .amount(Amount.builder().currency("NOK").value(1000).build())
+                    .reference(reference)
+                    .paymentDescription("CheckoutServiceTests.Can_Create_And_Get_Session")
+                    .build())
+            .merchantInfo(
+                InitiateSessionRequestMerchantInfo.builder()
+                    .callbackAuthorizationToken(UUID.randomUUID().toString())
+                    .callbackUrl("https://no.where.com/callback")
+                    .returnUrl("https://no.where.com/return")
+                    .termsAndConditionsUrl("https://no.where.com/terms")
+                    .build())
+            .build();
+
+    CompletableFuture<InitiateSessionResponse> sessionResponse = CheckoutService.initiateSessionAsync(sessionInitiationRequest);
+    assertNotNull(sessionResponse.get());
+
+    CompletableFuture<SessionResponse> sessionPolledResponse = CheckoutService.getSessionInfoAsync(reference);
+    assertEquals(ExternalSessionState.SessionCreated, sessionPolledResponse.get().getSessionState());
   }
 }

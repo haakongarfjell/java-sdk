@@ -12,12 +12,13 @@
 
 package no.vipps.model.epayment;
 
-import java.net.URI;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
+
+import java.net.URI;
 
 /** Problem. */
 @Jacksonized

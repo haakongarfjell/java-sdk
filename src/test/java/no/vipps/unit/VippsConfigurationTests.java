@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class VippsConfigurationTests {
   @Test
-  public void usingVippsConfigurationWithoutRunningConfigureThrowsException() throws Exception {
+  public void vipps_configuration_without_running_configure_throws_exception() {
     Assertions.assertThrows(
         VippsUserException.class,
         () -> {
@@ -18,7 +18,7 @@ public class VippsConfigurationTests {
   }
 
   @Test
-  public void usingVippsConfigurationWithInvalidThrowsException() {
+  public void using_vipps_configuration_with_invalid_throws_exception() {
     Assertions.assertThrows(
         VippsUserException.class,
         () -> VippsConfiguration.getInstance().configureVipps(null, null));

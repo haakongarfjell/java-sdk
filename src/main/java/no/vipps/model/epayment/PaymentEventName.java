@@ -10,7 +10,7 @@ public enum PaymentEventName {
   AUTHORIZED("AUTHORIZED"),
   TERMINATED("TERMINATED");
 
-  private String value;
+  private final String value;
 
   PaymentEventName(String value) {
     this.value = value;

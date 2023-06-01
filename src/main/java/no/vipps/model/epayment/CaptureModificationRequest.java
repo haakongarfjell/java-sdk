@@ -14,13 +14,14 @@ package no.vipps.model.epayment;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import java.util.Map;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
+
+import java.util.Map;
 
 /** CaptureModificationRequest. */
 @Jacksonized

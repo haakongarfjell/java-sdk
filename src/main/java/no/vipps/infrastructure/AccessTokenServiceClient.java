@@ -1,8 +1,10 @@
 package no.vipps.infrastructure;
 
-import java.util.HashMap;
 import no.vipps.helpers.Constants;
 import okhttp3.Headers;
+
+import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 
 public class AccessTokenServiceClient extends BaseServiceClient {
 
@@ -11,7 +13,7 @@ public class AccessTokenServiceClient extends BaseServiceClient {
   }
 
   @Override
-  public Headers getHeaders() {
+  Headers getHeaders() {
     return Headers.of(
         new HashMap<String, String>() {
           {
@@ -22,4 +24,10 @@ public class AccessTokenServiceClient extends BaseServiceClient {
           }
         });
   }
+
+  @Override
+  CompletableFuture<Headers> getHeadersAsync() {
+    return CompletableFuture.completedFuture(this.getHeaders());
+  }
 }
+

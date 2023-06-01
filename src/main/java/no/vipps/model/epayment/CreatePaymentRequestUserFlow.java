@@ -6,7 +6,7 @@ public enum CreatePaymentRequestUserFlow {
   WEB_REDIRECT("WEB_REDIRECT"),
   QR("QR");
 
-  private String value;
+  private final String value;
 
   CreatePaymentRequestUserFlow(String value) {
     this.value = value;

@@ -10,7 +10,7 @@ public enum PaymentAction {
   AUTHORISE("AUTHORISE"),
   TERMINATE("TERMINATE");
 
-  private String value;
+  private final String value;
 
   PaymentAction(String value) {
     this.value = value;

@@ -6,7 +6,7 @@ public enum Format {
   IMAGE_SVG_XML("IMAGE/SVG+XML"),
   IMAGE_PNG("IMAGE/PNG");
 
-  private String value;
+  private final String value;
 
   Format(String value) {
     this.value = value;
