@@ -1,5 +1,11 @@
 package no.vipps.integration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.checkout.Amount;
@@ -12,13 +18,6 @@ import no.vipps.model.checkout.SessionResponse;
 import no.vipps.services.CheckoutService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CheckoutServiceTests {
 
@@ -85,10 +84,13 @@ public class CheckoutServiceTests {
                     .build())
             .build();
 
-    CompletableFuture<InitiateSessionResponse> sessionResponse = CheckoutService.initiateSessionAsync(sessionInitiationRequest);
+    CompletableFuture<InitiateSessionResponse> sessionResponse =
+        CheckoutService.initiateSessionAsync(sessionInitiationRequest);
     assertNotNull(sessionResponse.get());
 
-    CompletableFuture<SessionResponse> sessionPolledResponse = CheckoutService.getSessionInfoAsync(reference);
-    assertEquals(ExternalSessionState.SessionCreated, sessionPolledResponse.get().getSessionState());
+    CompletableFuture<SessionResponse> sessionPolledResponse =
+        CheckoutService.getSessionInfoAsync(reference);
+    assertEquals(
+        ExternalSessionState.SessionCreated, sessionPolledResponse.get().getSessionState());
   }
 }

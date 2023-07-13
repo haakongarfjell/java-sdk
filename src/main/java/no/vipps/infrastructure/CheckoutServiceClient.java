@@ -1,10 +1,9 @@
 package no.vipps.infrastructure;
 
-import no.vipps.helpers.Constants;
-import okhttp3.Headers;
-
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
+import no.vipps.helpers.Constants;
+import okhttp3.Headers;
 
 public class CheckoutServiceClient extends BaseServiceClient {
 
@@ -18,7 +17,9 @@ public class CheckoutServiceClient extends BaseServiceClient {
         new HashMap<String, String>() {
           {
             put(Constants.HEADER_NAME_CLIENT_ID, VippsConfiguration.getInstance().getClientId());
-            put(Constants.HEADER_NAME_CLIENT_SECRET, VippsConfiguration.getInstance().getClientSecret());
+            put(
+                Constants.HEADER_NAME_CLIENT_SECRET,
+                VippsConfiguration.getInstance().getClientSecret());
           }
         });
   }

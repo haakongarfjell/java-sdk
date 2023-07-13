@@ -1,21 +1,20 @@
 package no.vipps.unit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import no.vipps.model.accesstoken.AccessToken;
-import no.vipps.services.AccessTokenCacheService;
-import org.junit.jupiter.api.Test;
-
-import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import javax.crypto.spec.SecretKeySpec;
+import no.vipps.model.accesstoken.AccessToken;
+import no.vipps.services.AccessTokenCacheService;
+import org.junit.jupiter.api.Test;
 
 public class AccessTokenCacheServiceTests {
   @Test

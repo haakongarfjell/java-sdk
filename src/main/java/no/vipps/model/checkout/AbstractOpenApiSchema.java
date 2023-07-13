@@ -2,7 +2,6 @@ package no.vipps.model.checkout;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.ws.rs.core.GenericType;
-
 import java.util.Map;
 import java.util.Objects;
 
@@ -80,11 +79,19 @@ public abstract class AbstractOpenApiSchema {
 
   @Override
   public String toString() {
-    return "class " + getClass() + " {\n" +
-        "    instance: " + toIndentedString(instance) + "\n" +
-        "    isNullable: " + toIndentedString(isNullable) + "\n" +
-        "    schemaType: " + toIndentedString(schemaType) + "\n" +
-        "}";
+    return "class "
+        + getClass()
+        + " {\n"
+        + "    instance: "
+        + toIndentedString(instance)
+        + "\n"
+        + "    isNullable: "
+        + toIndentedString(isNullable)
+        + "\n"
+        + "    schemaType: "
+        + toIndentedString(schemaType)
+        + "\n"
+        + "}";
   }
 
   /**

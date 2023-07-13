@@ -1,5 +1,6 @@
 package no.vipps.services;
 
+import java.util.concurrent.CompletableFuture;
 import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsServices;
 import no.vipps.model.epayment.CaptureModificationRequest;
@@ -11,8 +12,6 @@ import no.vipps.model.epayment.ModificationResponse;
 import no.vipps.model.epayment.PaymentEvent;
 import no.vipps.model.epayment.RefundModificationRequest;
 
-import java.util.concurrent.CompletableFuture;
-
 public class EpaymentService {
 
   public static CreatePaymentResponse createPayment(CreatePaymentRequest createPaymentRequest) {
@@ -21,7 +20,8 @@ public class EpaymentService {
             getRequestPath(), "POST", createPaymentRequest, CreatePaymentResponse.class);
   }
 
-  public static CompletableFuture<CreatePaymentResponse> createPaymentAsync(CreatePaymentRequest createPaymentRequest) {
+  public static CompletableFuture<CreatePaymentResponse> createPaymentAsync(
+      CreatePaymentRequest createPaymentRequest) {
     return VippsServices.getEpaymentServiceClient()
         .executeRequestAsync(
             getRequestPath(), "POST", createPaymentRequest, CreatePaymentResponse.class);
@@ -54,7 +54,8 @@ public class EpaymentService {
 
   public static CompletableFuture<ModificationResponse> cancelPaymentAsync(String reference) {
     return VippsServices.getEpaymentServiceClient()
-        .executeRequestAsync(getRequestPath(reference, "cancel"), "POST", ModificationResponse.class);
+        .executeRequestAsync(
+            getRequestPath(reference, "cancel"), "POST", ModificationResponse.class);
   }
 
   public static ModificationResponse capturePayment(
@@ -109,7 +110,8 @@ public class EpaymentService {
             null);
   }
 
-  public static CompletableFuture<Void> forceApprovePaymentAsync(String reference, ForceApprove forceApproveRequest) {
+  public static CompletableFuture<Void> forceApprovePaymentAsync(
+      String reference, ForceApprove forceApproveRequest) {
     return VippsServices.getEpaymentServiceClient()
         .executeRequestAsync(
             (VippsConfiguration.getInstance().getBaseUrl()

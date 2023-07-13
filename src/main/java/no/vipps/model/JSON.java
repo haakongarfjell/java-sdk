@@ -10,13 +10,12 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.ext.ContextResolver;
-import org.openapitools.jackson.nullable.JsonNullableModule;
-
 import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.openapitools.jackson.nullable.JsonNullableModule;
 
 public class JSON implements ContextResolver<ObjectMapper> {
   private final ObjectMapper mapper;

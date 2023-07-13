@@ -1,5 +1,12 @@
 package no.vipps.integration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.epayment.Amount;
@@ -21,16 +28,6 @@ import no.vipps.model.epayment.State;
 import no.vipps.services.EpaymentService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class EpaymentServiceTests {
 
@@ -71,7 +68,8 @@ public class EpaymentServiceTests {
   }
 
   @Test
-  public void can_create_get_cancel_payment_async() throws ExecutionException, InterruptedException {
+  public void can_create_get_cancel_payment_async()
+      throws ExecutionException, InterruptedException {
     String reference = UUID.randomUUID().toString();
     CreatePaymentRequest createPaymentRequest = getCreatePaymentRequest(reference);
     CreatePaymentResponse createPaymentResponse =
@@ -139,7 +137,8 @@ public class EpaymentServiceTests {
   }
 
   @Test
-  public void can_create_approve_capture_refund_payment_async() throws ExecutionException, InterruptedException {
+  public void can_create_approve_capture_refund_payment_async()
+      throws ExecutionException, InterruptedException {
     String reference = UUID.randomUUID().toString();
     CreatePaymentRequest createPaymentRequest = getCreatePaymentRequest(reference);
     CreatePaymentResponse createPaymentResponse =
@@ -149,10 +148,11 @@ public class EpaymentServiceTests {
     assertEquals(reference, createPaymentResponse.getReference());
 
     EpaymentService.forceApprovePaymentAsync(
-        reference,
-        ForceApprove.builder()
-            .customer(Customer.builder().phoneNumber(CUSTOMER_PHONE_NUMBER).build())
-            .build()).get();
+            reference,
+            ForceApprove.builder()
+                .customer(Customer.builder().phoneNumber(CUSTOMER_PHONE_NUMBER).build())
+                .build())
+        .get();
 
     CaptureModificationRequest capturePaymentRequest =
         CaptureModificationRequest.builder()

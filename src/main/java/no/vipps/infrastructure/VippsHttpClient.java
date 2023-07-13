@@ -1,17 +1,16 @@
 package no.vipps.infrastructure;
 
+import java.io.IOException;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 import no.vipps.exceptions.VippsTechnicalException;
 import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import java.io.IOException;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
 
 public class VippsHttpClient implements VippsClient {
 

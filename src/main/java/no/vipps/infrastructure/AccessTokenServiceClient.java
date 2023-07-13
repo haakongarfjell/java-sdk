@@ -1,10 +1,9 @@
 package no.vipps.infrastructure;
 
-import no.vipps.helpers.Constants;
-import okhttp3.Headers;
-
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
+import no.vipps.helpers.Constants;
+import okhttp3.Headers;
 
 public class AccessTokenServiceClient extends BaseServiceClient {
 
@@ -30,4 +29,3 @@ public class AccessTokenServiceClient extends BaseServiceClient {
     return CompletableFuture.completedFuture(this.getHeaders());
   }
 }
-
