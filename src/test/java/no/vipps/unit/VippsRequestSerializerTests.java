@@ -1,9 +1,18 @@
 package no.vipps.unit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import no.vipps.exceptions.VippsTechnicalException;
 import no.vipps.helpers.VippsRequestSerializer;
 import no.vipps.model.checkout.Amount;
@@ -19,16 +28,6 @@ import no.vipps.model.epayment.PaymentMethod;
 import no.vipps.model.epayment.PaymentMethodType;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 public class VippsRequestSerializerTests {
 
   @Test
@@ -40,8 +39,7 @@ public class VippsRequestSerializerTests {
                     .amount(Amount.builder().currency("NOK").value(49000).build())
                     .paymentDescription("Hei")
                     .build())
-            .additionalProperties(
-                map("Transaction", map("Metadata", map("KID", "100001"))))
+            .additionalProperties(map("Transaction", map("Metadata", map("KID", "100001"))))
             .build();
 
     String serializedRequest = VippsRequestSerializer.serializeVippsRequest(initiateSessionRequest);
@@ -101,7 +99,8 @@ public class VippsRequestSerializerTests {
   }
 
   @Test
-  public void serialize_with_extra_parameters_on_undefined_receiver() throws JsonProcessingException {
+  public void serialize_with_extra_parameters_on_undefined_receiver()
+      throws JsonProcessingException {
     InitiateSessionRequest initiateSessionRequest =
         InitiateSessionRequest.builder()
             .transaction(

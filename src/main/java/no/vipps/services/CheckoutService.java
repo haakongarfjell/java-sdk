@@ -1,5 +1,8 @@
 package no.vipps.services;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import no.vipps.infrastructure.CheckoutServiceClient;
 import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsServices;
@@ -7,13 +10,9 @@ import no.vipps.model.checkout.InitiateSessionRequest;
 import no.vipps.model.checkout.InitiateSessionResponse;
 import no.vipps.model.checkout.SessionResponse;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+public class CheckoutService {
+  private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-public class  CheckoutService {
-  private static final ExecutorService executor
-          = Executors.newSingleThreadExecutor();
   public static InitiateSessionResponse initiateSession(
       InitiateSessionRequest initiateSessionRequest) {
     CheckoutServiceClient checkoutServiceClient = VippsServices.getCheckoutServiceClient();
@@ -41,7 +40,8 @@ public class  CheckoutService {
 
   public static CompletableFuture<SessionResponse> getSessionInfoAsync(String reference) {
     CheckoutServiceClient checkoutServiceClient = VippsServices.getCheckoutServiceClient();
-    String requestPath = VippsConfiguration.getInstance().getBaseUrl() + "/checkout/v3/session/" + reference;
+    String requestPath =
+        VippsConfiguration.getInstance().getBaseUrl() + "/checkout/v3/session/" + reference;
 
     return checkoutServiceClient.executeRequestAsync(requestPath, "GET", SessionResponse.class);
   }

@@ -1,12 +1,11 @@
 package no.vipps.infrastructure;
 
-import no.vipps.helpers.Constants;
-import no.vipps.services.AccessTokenService;
-import okhttp3.Headers;
-
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import no.vipps.helpers.Constants;
+import no.vipps.services.AccessTokenService;
+import okhttp3.Headers;
 
 public class EpaymentServiceClient extends BaseServiceClient {
 
@@ -28,15 +27,14 @@ public class EpaymentServiceClient extends BaseServiceClient {
   @Override
   CompletableFuture<Headers> getHeadersAsync() {
     return AccessTokenService.getAccessTokenAsync()
-        .thenApply((accessToken -> {
-          HashMap<String, String> headers = new HashMap<>();
-          headers.put(
-              Constants.HEADER_NAME_AUTHORIZATION,
-              Constants.AUTHORIZATION_SCHEME_NAME_BEARER + " " + accessToken.getToken());
-          headers.put("Idempotency-Key", UUID.randomUUID().toString());
-          return Headers.of(headers);
-        }));
+        .thenApply(
+            (accessToken -> {
+              HashMap<String, String> headers = new HashMap<>();
+              headers.put(
+                  Constants.HEADER_NAME_AUTHORIZATION,
+                  Constants.AUTHORIZATION_SCHEME_NAME_BEARER + " " + accessToken.getToken());
+              headers.put("Idempotency-Key", UUID.randomUUID().toString());
+              return Headers.of(headers);
+            }));
   }
-
-
 }

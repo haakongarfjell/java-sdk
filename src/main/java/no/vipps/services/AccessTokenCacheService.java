@@ -1,8 +1,5 @@
 package no.vipps.services;
 
-import no.vipps.exceptions.VippsTechnicalException;
-import no.vipps.model.accesstoken.AccessToken;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,6 +9,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import no.vipps.exceptions.VippsTechnicalException;
+import no.vipps.model.accesstoken.AccessToken;
 
 public class AccessTokenCacheService {
 
