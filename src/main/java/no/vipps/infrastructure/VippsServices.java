@@ -11,8 +11,6 @@ public final class VippsServices {
 
   public static EpaymentServiceClient getEpaymentServiceClient() {
     if (epaymentServiceClient == null) {
-      System.out.println("Halla kompis");
-      VippsHttpClient client = VippsConfiguration.getInstance().getVippsHttpClient();
       epaymentServiceClient =
           new EpaymentServiceClient(VippsConfiguration.getInstance().getVippsHttpClient());
     }
