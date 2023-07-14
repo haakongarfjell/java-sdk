@@ -5,10 +5,7 @@ import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.checkout.UserFlow;
 import no.vipps.model.epayment.*;
-import no.vipps.model.login.AuthenticationMethod;
-import no.vipps.model.login.OauthTokenResponse;
-import no.vipps.model.login.StartLoginUriRequest;
-import no.vipps.model.login.TokenRequest;
+import no.vipps.model.login.*;
 import no.vipps.services.EpaymentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,13 +35,13 @@ public class LoginController {
 
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     @ResponseBody
-    public OauthTokenResponse GetWebLoginToken(@RequestParam("code") String code)
+    public CompletableFuture<OauthTokenResponse> GetWebLoginToken(@RequestParam("code") String code)
     {
         TokenRequest getTokenRequest = TokenRequest.builder()
                 .redirectUri("http://localhost:3000")
                 .code(code)
                 .build();
-        return LoginService.getWebLoginToken(getTokenRequest, AuthenticationMethod.Basic);
+        return LoginService.getWebLoginTokenAsync(getTokenRequest, AuthenticationMethod.Basic);
     }
 
     @RequestMapping(value = "/createPayment", method = RequestMethod.POST, produces = "application/json")
@@ -72,6 +69,31 @@ public class LoginController {
                 .build();
         CreatePaymentResponse response = EpaymentService.createPayment(request);
         return response;
+    }
+
+    @RequestMapping(value = "/init-ciba", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public CompletableFuture<InitCibaResponse> InitCiba() {
+        InitCibaRequest initCibaRequest = InitCibaRequest.builder()
+                .scope("openid email name phoneNumber")
+                .phoneNumber("47375750")
+                .bindingMessage("XYZ-123")
+                .redirectUri("http://localhost:3000")
+                .build();
+
+        return LoginService.InitCibaAsync(initCibaRequest, AuthenticationMethod.Basic);
+    }
+
+    @RequestMapping(value = "/ciba-token-no-redirect", method = RequestMethod.POST)
+    @ResponseBody
+    public OauthTokenResponse GetCibaNoRedirect(@RequestParam("authReqId") String authReqId) {
+        return LoginService.GetCibaTokenNoRedirect(authReqId, AuthenticationMethod.Basic);
+    }
+
+    @RequestMapping(value = "/ciba-token-redirect", method = RequestMethod.POST)
+    @ResponseBody
+    public OauthTokenResponse GetCibaRedirect(@RequestParam("code") String code) {
+        return LoginService.GetCibaTokenRedirect(code, AuthenticationMethod.Basic);
     }
 
 }

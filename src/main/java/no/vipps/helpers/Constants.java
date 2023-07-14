@@ -7,5 +7,4 @@ public class Constants {
   public static final String AUTHORIZATION_SCHEME_NAME_BEARER = "Bearer";
 
   public static final String SUBSCRIPTION_KEY = "Ocp-Apim-Subscription-Key";
-
 }

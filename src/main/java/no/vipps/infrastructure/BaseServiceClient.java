@@ -1,10 +1,6 @@
 package no.vipps.infrastructure;
 
 import java.awt.*;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.Normalizer;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import lombok.Getter;
@@ -39,11 +35,8 @@ public abstract class BaseServiceClient {
 
   @NotNull
   private static <T> RequestBody createFormRequestBody(T request) {
-      //String formContent = FormUrlEncoder.Encode(request);
-      // String formContent = "grant_type=authorization_code&code=KKX1NhRU-ZE5ZyK0QkwVhJ24PBwDAa47KhRqxsfWdxBNthyZhd87oPq7WRbIB2qEMkagJ7ORG9ZyNjUIZVcb4i6wWSKipbfz_ptAfy516m2EYd29R5KBU53jgaiWlHBy" +
-      //         "&redirect_uri=http://localhost:3000";
-      String formContent = FormUrlEncoder.Encode(request);
-      return RequestBody.create(formContent, X_WWW_FORM_URLENCODED_MEDIA_TYPE);
+    String formContent = FormUrlEncoder.Encode(request);
+    return RequestBody.create(formContent, X_WWW_FORM_URLENCODED_MEDIA_TYPE);
   }
 
   public <TRequest, TResponse> TResponse executeRequest(
@@ -59,13 +52,13 @@ public abstract class BaseServiceClient {
   public <TRequest, TResponse> CompletableFuture<TResponse> executeRequestAsync(
       String path, String httpMethod, TRequest data, Class<TResponse> responseClass) {
     return executeRequestBaseAndParseAsync(
-        path, httpMethod, createFormRequestBody(data), responseClass);
+        path, httpMethod, createRequestBody(data), responseClass);
   }
 
   public <TRequest, TResponse> CompletableFuture<TResponse> executeFormRequestAsync(
       String path, String httpMethod, TRequest data, Class<TResponse> responseClass) {
     return executeRequestBaseAndParseAsync(
-        path, httpMethod, createRequestBody(data), responseClass);
+        path, httpMethod, createFormRequestBody(data), responseClass);
   }
 
   public <TResponse> TResponse executeRequest(

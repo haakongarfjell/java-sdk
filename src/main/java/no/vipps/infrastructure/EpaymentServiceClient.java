@@ -34,7 +34,9 @@ public class EpaymentServiceClient extends BaseServiceClient {
               headers.put(
                   Constants.HEADER_NAME_AUTHORIZATION,
                   Constants.AUTHORIZATION_SCHEME_NAME_BEARER + " " + accessToken.getToken());
-              headers.put(Constants.SUBSCRIPTION_KEY, VippsConfiguration.getInstance().getSubscriptionKey());
+              headers.put(
+                  Constants.SUBSCRIPTION_KEY,
+                  VippsConfiguration.getInstance().getSubscriptionKey());
               headers.put("Idempotency-Key", UUID.randomUUID().toString());
               return Headers.of(headers);
             }));
