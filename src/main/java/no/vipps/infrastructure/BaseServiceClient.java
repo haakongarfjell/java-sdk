@@ -1,16 +1,26 @@
 package no.vipps.infrastructure;
 
+import java.awt.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.Normalizer;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import lombok.Getter;
+import no.vipps.helpers.FormUrlEncoder;
 import no.vipps.helpers.VippsRequestSerializer;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseServiceClient {
-  private static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
+  private static MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
+  private static MediaType X_WWW_FORM_URLENCODED_MEDIA_TYPE =
+      MediaType.get("application/x-www-form-urlencoded; charset=utf-8");
   @Getter private final VippsClient vippsHttpClient;
 
   public BaseServiceClient(VippsClient vippsHttpClient) {
@@ -21,9 +31,16 @@ public abstract class BaseServiceClient {
 
   abstract CompletableFuture<Headers> getHeadersAsync();
 
+  @NotNull
   private static <T> RequestBody createRequestBody(T request) {
     String serializedRequest = VippsRequestSerializer.serializeVippsRequest(request);
     return RequestBody.create(serializedRequest, JSON_MEDIA_TYPE);
+  }
+
+  @NotNull
+  private static <T> RequestBody createFormRequestBody(T request) {
+      String formContent = FormUrlEncoder.Encode(request);
+      return RequestBody.create(formContent, X_WWW_FORM_URLENCODED_MEDIA_TYPE);
   }
 
   public <TRequest, TResponse> TResponse executeRequest(
@@ -31,7 +48,18 @@ public abstract class BaseServiceClient {
     return executeRequestBaseAndParse(path, httpMethod, createRequestBody(data), responseClass);
   }
 
+  public <TRequest, TResponse> TResponse executeFormRequest(
+      String path, String httpMethod, TRequest data, Class<TResponse> responseClass) {
+    return executeRequestBaseAndParse(path, httpMethod, createFormRequestBody(data), responseClass);
+  }
+
   public <TRequest, TResponse> CompletableFuture<TResponse> executeRequestAsync(
+      String path, String httpMethod, TRequest data, Class<TResponse> responseClass) {
+    return executeRequestBaseAndParseAsync(
+        path, httpMethod, createFormRequestBody(data), responseClass);
+  }
+
+  public <TRequest, TResponse> CompletableFuture<TResponse> executeFormRequestAsync(
       String path, String httpMethod, TRequest data, Class<TResponse> responseClass) {
     return executeRequestBaseAndParseAsync(
         path, httpMethod, createRequestBody(data), responseClass);
@@ -47,6 +75,7 @@ public abstract class BaseServiceClient {
     return executeRequestBaseAndParseAsync(path, httpMethod, null, responseClass);
   }
 
+  @Nullable
   private <TResponse> TResponse executeRequestBaseAndParse(
       String path, String httpMethod, RequestBody requestBody, Class<TResponse> responseClass) {
     RequestBody body =

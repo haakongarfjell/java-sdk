@@ -14,6 +14,7 @@ import no.vipps.model.epayment.RefundModificationRequest;
 
 public class EpaymentService {
 
+
   public static CreatePaymentResponse createPayment(CreatePaymentRequest createPaymentRequest) {
     return VippsServices.getEpaymentServiceClient()
         .executeRequest(

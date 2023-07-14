@@ -24,7 +24,7 @@ public class VippsHttpClient implements VippsClient {
   private static Headers getHeaders() {
 
     HashMap<String, String> headers = new HashMap<>();
-    headers.put("Ocp-Apim-Subscription-Key", VippsConfiguration.getInstance().getSubscriptionKey());
+    // headers.put("Ocp-Apim-Subscription-Key", VippsConfiguration.getInstance().getSubscriptionKey());
     headers.put(
         "Merchant-Serial-Number", VippsConfiguration.getInstance().getMerchantSerialNumber());
     headers.put("Vipps-System-Name", VippsConfiguration.getInstance().getSystemName());
