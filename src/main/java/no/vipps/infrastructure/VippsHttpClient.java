@@ -24,7 +24,8 @@ public class VippsHttpClient implements VippsClient {
   private static Headers getHeaders() {
 
     HashMap<String, String> headers = new HashMap<>();
-    headers.put("Ocp-Apim-Subscription-Key", VippsConfiguration.getInstance().getSubscriptionKey());
+    // headers.put("Ocp-Apim-Subscription-Key",
+    // VippsConfiguration.getInstance().getSubscriptionKey());
     headers.put(
         "Merchant-Serial-Number", VippsConfiguration.getInstance().getMerchantSerialNumber());
     headers.put("Vipps-System-Name", VippsConfiguration.getInstance().getSystemName());
@@ -47,6 +48,7 @@ public class VippsHttpClient implements VippsClient {
             .newBuilder()
             .headers(request.headers().newBuilder().addAll(getHeaders()).build())
             .build();
+    int i = 0;
     try (Response response = httpClient.newCall(modifiedRequest).execute()) {
       if (!response.isSuccessful()) {
         throw new IOException("Unexpected response " + response + ": " + response.body().string());

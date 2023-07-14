@@ -20,6 +20,7 @@ public class AccessTokenServiceClient extends BaseServiceClient {
             put(
                 Constants.HEADER_NAME_CLIENT_SECRET,
                 VippsConfiguration.getInstance().getClientSecret());
+            put(Constants.SUBSCRIPTION_KEY, VippsConfiguration.getInstance().getSubscriptionKey());
           }
         });
   }

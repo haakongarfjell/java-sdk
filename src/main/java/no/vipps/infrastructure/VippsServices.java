@@ -5,6 +5,10 @@ public final class VippsServices {
   private static AccessTokenServiceClient accessTokenServiceClient;
   private static CheckoutServiceClient _checkoutServiceClient;
 
+  private static LoginServiceClientPost loginServiceClientPost;
+
+  private static LoginServiceClientBasic loginServiceClientBasic;
+
   public static EpaymentServiceClient getEpaymentServiceClient() {
     if (epaymentServiceClient == null) {
       epaymentServiceClient =
@@ -27,5 +31,21 @@ public final class VippsServices {
           new CheckoutServiceClient(VippsConfiguration.getInstance().getVippsHttpClient());
     }
     return _checkoutServiceClient;
+  }
+
+  public static LoginServiceClientPost getloginServiceClientPost() {
+    if (loginServiceClientPost == null) {
+      loginServiceClientPost =
+          new LoginServiceClientPost(VippsConfiguration.getInstance().getVippsHttpClient());
+    }
+    return loginServiceClientPost;
+  }
+
+  public static LoginServiceClientBasic getloginServiceClientBasic() {
+    if (loginServiceClientBasic == null) {
+      loginServiceClientBasic =
+          new LoginServiceClientBasic(VippsConfiguration.getInstance().getVippsHttpClient());
+    }
+    return loginServiceClientBasic;
   }
 }
