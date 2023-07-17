@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 @Builder
 public class VippsConfigurationOptions {
+  private final String systemName = "Vipps Java SDK";
+  private final String systemVersion = "1.0";
   private String pluginName;
   private String pluginVersion;
   private String clientId;

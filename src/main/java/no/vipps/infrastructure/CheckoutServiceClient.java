@@ -1,15 +1,18 @@
 package no.vipps.infrastructure;
 
+import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 import no.vipps.helpers.Constants;
 import okhttp3.Headers;
 
-import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
-
 public class CheckoutServiceClient extends BaseServiceClient {
 
-  public CheckoutServiceClient(VippsClient vippsHttpClient) {
-    super(vippsHttpClient);
+  private final VippsConfigurationOptions vippsConfigurationOptions;
+
+  public CheckoutServiceClient(
+      VippsClient vippsClient, VippsConfigurationOptions vippsConfigurationOptions) {
+    super(vippsClient);
+    this.vippsConfigurationOptions = vippsConfigurationOptions;
   }
 
   @Override
@@ -17,8 +20,9 @@ public class CheckoutServiceClient extends BaseServiceClient {
     return Headers.of(
         new HashMap<String, String>() {
           {
-            put(Constants.HEADER_NAME_CLIENT_ID, VippsConfiguration.getInstance().getClientId());
-            put(Constants.HEADER_NAME_CLIENT_SECRET, VippsConfiguration.getInstance().getClientSecret());
+            put(Constants.HEADER_NAME_CLIENT_ID, vippsConfigurationOptions.getClientId());
+            put(Constants.HEADER_NAME_CLIENT_SECRET, vippsConfigurationOptions.getClientSecret());
+            put(Constants.SUBSCRIPTION_KEY, vippsConfigurationOptions.getSubscriptionKey());
           }
         });
   }
