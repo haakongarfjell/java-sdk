@@ -1,20 +1,14 @@
 package no.vippsdemo.demo;
-
-import io.github.cdimascio.dotenv.Dotenv;
-import no.vipps.IVippsApi;
 import no.vipps.VippsApi;
-import no.vipps.infrastructure.VippsConfigurationOptions;
-import no.vipps.model.checkout.UserFlow;
 import no.vipps.model.epayment.*;
 import no.vipps.model.login.*;
-import no.vipps.services.EpaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import no.vipps.services.LoginService;
+
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
