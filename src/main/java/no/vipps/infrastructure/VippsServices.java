@@ -33,7 +33,7 @@ public final class VippsServices {
     return _checkoutServiceClient;
   }
 
-  public static LoginServiceClientPost getloginServiceClientPost() {
+  public static LoginServiceClientPost getLoginServiceClientPost() {
     if (loginServiceClientPost == null) {
       loginServiceClientPost =
           new LoginServiceClientPost(VippsConfiguration.getInstance().getVippsHttpClient());
@@ -41,7 +41,7 @@ public final class VippsServices {
     return loginServiceClientPost;
   }
 
-  public static LoginServiceClientBasic getloginServiceClientBasic() {
+  public static LoginServiceClientBasic getLoginServiceClientBasic() {
     if (loginServiceClientBasic == null) {
       loginServiceClientBasic =
           new LoginServiceClientBasic(VippsConfiguration.getInstance().getVippsHttpClient());

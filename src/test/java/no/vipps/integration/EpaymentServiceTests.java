@@ -3,6 +3,7 @@ package no.vipps.integration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -35,12 +36,14 @@ public class EpaymentServiceTests {
 
   @BeforeAll
   public static void authenticate() {
+    Dotenv dotenv = Dotenv.configure().load();
+
     VippsConfigurationOptions config =
         VippsConfigurationOptions.builder()
-            .clientId(System.getenv("CLIENT_ID"))
-            .clientSecret(System.getenv("CLIENT_SECRET"))
-            .subscriptionKey(System.getenv("SUBSCRIPTION_KEY"))
-            .merchantSerialNumber(System.getenv("MERCHANT_SERIAL_NUMBER"))
+            .clientId(dotenv.get("CLIENT_ID"))
+            .clientSecret(dotenv.get("CLIENT_SECRET"))
+            .subscriptionKey(dotenv.get("OCP_APIM_SUBSCRIPTION_KEY"))
+            .merchantSerialNumber(dotenv.get("MSN"))
             .isUseTestMode(true)
             .pluginName("Vipps.net.IntegrationTests")
             .pluginVersion("1.0.0")
