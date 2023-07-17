@@ -40,10 +40,10 @@ public class EpaymentServiceTests {
 
     VippsConfigurationOptions config =
         VippsConfigurationOptions.builder()
-            .clientId(dotenv.get("CLIENT_ID"))
-            .clientSecret(dotenv.get("CLIENT_SECRET"))
-            .subscriptionKey(dotenv.get("OCP_APIM_SUBSCRIPTION_KEY"))
-            .merchantSerialNumber(dotenv.get("MSN"))
+            .clientId(System.getenv("CLIENT_ID"))
+            .clientSecret(System.getenv("CLIENT_SECRET"))
+            .subscriptionKey(System.getenv("SUBSCRIPTION_KEY"))
+            .merchantSerialNumber(System.getenv("MERCHANT_SERIAL_NUMBER"))
             .isUseTestMode(true)
             .pluginName("Vipps.net.IntegrationTests")
             .pluginVersion("1.0.0")
