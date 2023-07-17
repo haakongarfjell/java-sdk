@@ -10,7 +10,6 @@ import no.vipps.model.login.AuthenticationMethod;
 import no.vipps.model.login.InitCibaRequest;
 import no.vipps.model.login.InitCibaResponse;
 import no.vipps.model.login.StartLoginUriRequest;
-import no.vipps.services.LoginService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +21,8 @@ public class LoginServiceTests {
   @BeforeAll
   public static void authenticate() {
     Dotenv dotenv = Dotenv.configure().load();
-    VippsConfigurationOptions config = VippsConfigurationOptions.builder()
+    VippsConfigurationOptions config =
+        VippsConfigurationOptions.builder()
             .clientId(dotenv.get("CLIENT_ID"))
             .clientSecret(dotenv.get("CLIENT_SECRET"))
             .subscriptionKey(dotenv.get("OCP_APIM_SUBSCRIPTION_KEY"))

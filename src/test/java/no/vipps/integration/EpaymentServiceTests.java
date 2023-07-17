@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-
 import no.vipps.VippsApi;
 import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.epayment.Amount;
@@ -27,7 +26,6 @@ import no.vipps.model.epayment.PaymentMethod;
 import no.vipps.model.epayment.PaymentMethodType;
 import no.vipps.model.epayment.RefundModificationRequest;
 import no.vipps.model.epayment.State;
-import no.vipps.services.EpaymentService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +38,8 @@ public class EpaymentServiceTests {
   @BeforeAll
   public static void authenticate() {
     Dotenv dotenv = Dotenv.configure().load();
-    VippsConfigurationOptions config = VippsConfigurationOptions.builder()
+    VippsConfigurationOptions config =
+        VippsConfigurationOptions.builder()
             .clientId(dotenv.get("CLIENT_ID"))
             .clientSecret(dotenv.get("CLIENT_SECRET"))
             .subscriptionKey(dotenv.get("OCP_APIM_SUBSCRIPTION_KEY"))
@@ -77,17 +76,19 @@ public class EpaymentServiceTests {
     String reference = UUID.randomUUID().toString();
     CreatePaymentRequest createPaymentRequest = getCreatePaymentRequest(reference);
     CreatePaymentResponse createPaymentResponse =
-            vippsApi.epaymentService().createPaymentAsync(createPaymentRequest).get();
+        vippsApi.epaymentService().createPaymentAsync(createPaymentRequest).get();
 
     assertNotNull(createPaymentResponse);
     assertEquals(reference, createPaymentResponse.getReference());
 
-    ModificationResponse modificationResponse = vippsApi.epaymentService().cancelPaymentAsync(reference).get();
+    ModificationResponse modificationResponse =
+        vippsApi.epaymentService().cancelPaymentAsync(reference).get();
     assertNotNull(modificationResponse);
     assertEquals(reference, modificationResponse.getReference());
     assertEquals(State.TERMINATED, modificationResponse.getState());
 
-    GetPaymentResponse getPaymentResponse = vippsApi.epaymentService().getPaymentAsync(reference).get();
+    GetPaymentResponse getPaymentResponse =
+        vippsApi.epaymentService().getPaymentAsync(reference).get();
     assertEquals(reference, getPaymentResponse.getReference());
     assertEquals(State.TERMINATED, getPaymentResponse.getState());
   }
@@ -97,16 +98,18 @@ public class EpaymentServiceTests {
     String reference = UUID.randomUUID().toString();
     CreatePaymentRequest createPaymentRequest = getCreatePaymentRequest(reference);
     CreatePaymentResponse createPaymentResponse =
-            vippsApi.epaymentService().createPayment(createPaymentRequest);
+        vippsApi.epaymentService().createPayment(createPaymentRequest);
 
     assertNotNull(createPaymentResponse);
     assertEquals(reference, createPaymentResponse.getReference());
 
-    vippsApi.epaymentService().forceApprovePayment(
-        reference,
-        ForceApprove.builder()
-            .customer(Customer.builder().phoneNumber(CUSTOMER_PHONE_NUMBER).build())
-            .build());
+    vippsApi
+        .epaymentService()
+        .forceApprovePayment(
+            reference,
+            ForceApprove.builder()
+                .customer(Customer.builder().phoneNumber(CUSTOMER_PHONE_NUMBER).build())
+                .build());
 
     CaptureModificationRequest capturePaymentRequest =
         CaptureModificationRequest.builder()
@@ -114,7 +117,7 @@ public class EpaymentServiceTests {
             .build();
 
     ModificationResponse captureResponse =
-            vippsApi.epaymentService().capturePayment(reference, capturePaymentRequest);
+        vippsApi.epaymentService().capturePayment(reference, capturePaymentRequest);
     assertNotNull(captureResponse);
     assertEquals(reference, captureResponse.getReference());
     assertEquals(State.AUTHORIZED, captureResponse.getState());
@@ -125,7 +128,7 @@ public class EpaymentServiceTests {
             .build();
 
     ModificationResponse modificationResponse =
-            vippsApi.epaymentService().refundPayment(reference, refundPaymentRequest);
+        vippsApi.epaymentService().refundPayment(reference, refundPaymentRequest);
     assertNotNull(modificationResponse);
     assertEquals(reference, modificationResponse.getReference());
     assertEquals(State.AUTHORIZED, modificationResponse.getState());
@@ -146,12 +149,14 @@ public class EpaymentServiceTests {
     String reference = UUID.randomUUID().toString();
     CreatePaymentRequest createPaymentRequest = getCreatePaymentRequest(reference);
     CreatePaymentResponse createPaymentResponse =
-            vippsApi.epaymentService().createPaymentAsync(createPaymentRequest).get();
+        vippsApi.epaymentService().createPaymentAsync(createPaymentRequest).get();
 
     assertNotNull(createPaymentResponse);
     assertEquals(reference, createPaymentResponse.getReference());
 
-    vippsApi.epaymentService().forceApprovePaymentAsync(
+    vippsApi
+        .epaymentService()
+        .forceApprovePaymentAsync(
             reference,
             ForceApprove.builder()
                 .customer(Customer.builder().phoneNumber(CUSTOMER_PHONE_NUMBER).build())
@@ -164,7 +169,7 @@ public class EpaymentServiceTests {
             .build();
 
     ModificationResponse captureResponse =
-            vippsApi.epaymentService().capturePaymentAsync(reference, capturePaymentRequest).get();
+        vippsApi.epaymentService().capturePaymentAsync(reference, capturePaymentRequest).get();
     assertNotNull(captureResponse);
     assertEquals(reference, captureResponse.getReference());
     assertEquals(State.AUTHORIZED, captureResponse.getState());
@@ -175,12 +180,13 @@ public class EpaymentServiceTests {
             .build();
 
     ModificationResponse modificationResponse =
-            vippsApi.epaymentService().refundPaymentAsync(reference, refundPaymentRequest).get();
+        vippsApi.epaymentService().refundPaymentAsync(reference, refundPaymentRequest).get();
     assertNotNull(modificationResponse);
     assertEquals(reference, modificationResponse.getReference());
     assertEquals(State.AUTHORIZED, modificationResponse.getState());
 
-    PaymentEvent[] paymentEventsArray = vippsApi.epaymentService().getPaymentEventLogAsync(reference).get();
+    PaymentEvent[] paymentEventsArray =
+        vippsApi.epaymentService().getPaymentEventLogAsync(reference).get();
     assertNotNull(paymentEventsArray);
     List<PaymentEvent> paymentEvents = Arrays.asList(paymentEventsArray);
     assertOneEvent(paymentEvents, PaymentEventName.CREATED);
