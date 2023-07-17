@@ -2,19 +2,35 @@ package no.vipps.services;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import no.vipps.infrastructure.VippsConfiguration;
-import no.vipps.infrastructure.VippsServices;
+import no.vipps.helpers.UrlHelper;
+import no.vipps.infrastructure.LoginServiceClientBasic;
+import no.vipps.infrastructure.LoginServiceClientPost;
+import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.login.*;
 
 public class LoginService {
 
-  public static String GetStartLoginUri(
+  private final LoginServiceClientBasic loginServiceClientBasic;
+  private final LoginServiceClientPost loginServiceClientPost;
+
+  private final VippsConfigurationOptions vippsConfigurationOptions;
+
+  public LoginService(
+      LoginServiceClientBasic loginServiceClientBasic,
+      LoginServiceClientPost loginServiceClientPost,
+      VippsConfigurationOptions vippsConfigurationOptions) {
+    this.loginServiceClientBasic = loginServiceClientBasic;
+    this.loginServiceClientPost = loginServiceClientPost;
+    this.vippsConfigurationOptions = vippsConfigurationOptions;
+  }
+
+  public String GetStartLoginUri(
       StartLoginUriRequest startLoginUriRequest, AuthenticationMethod authenticationMethod) {
     String startLoginUri =
-        VippsConfiguration.getInstance().getBaseUrl()
+        UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode())
             + "/access-management-1.0/access/oauth2/auth"
             + "?client_id="
-            + VippsConfiguration.getInstance().getClientId()
+            + vippsConfigurationOptions.getClientId()
             + "&response_type=code"
             + "&scope="
             + startLoginUriRequest.getScope()
@@ -29,35 +45,33 @@ public class LoginService {
     return startLoginUri;
   }
 
-  public static OauthTokenResponse getWebLoginToken(
+  public OauthTokenResponse getWebLoginToken(
       TokenRequest getTokenRequest, AuthenticationMethod authenticationMethod) {
     getTokenRequest.setGrantType("authorization_code");
     if (authenticationMethod == AuthenticationMethod.Post) {
-      getTokenRequest.setClientId(VippsConfiguration.getInstance().getClientId());
-      getTokenRequest.setClientSecret(VippsConfiguration.getInstance().getClientSecret());
-      return VippsServices.getLoginServiceClientPost()
-          .executeFormRequest(getRequestPath(), "POST", getTokenRequest, OauthTokenResponse.class);
+      getTokenRequest.setClientId(vippsConfigurationOptions.getClientId());
+      getTokenRequest.setClientSecret(vippsConfigurationOptions.getClientSecret());
+      return loginServiceClientPost.executeFormRequest(
+          getRequestPath(), "POST", getTokenRequest, OauthTokenResponse.class);
     }
-    return VippsServices.getLoginServiceClientBasic()
-        .executeFormRequest(getRequestPath(), "POST", getTokenRequest, OauthTokenResponse.class);
+    return loginServiceClientBasic.executeFormRequest(
+        getRequestPath(), "POST", getTokenRequest, OauthTokenResponse.class);
   }
 
-  public static CompletableFuture<OauthTokenResponse> getWebLoginTokenAsync(
+  public CompletableFuture<OauthTokenResponse> getWebLoginTokenAsync(
       TokenRequest getTokenRequest, AuthenticationMethod authenticationMethod) {
     getTokenRequest.setGrantType("authorization_code");
     if (authenticationMethod == AuthenticationMethod.Post) {
-      getTokenRequest.setClientId(VippsConfiguration.getInstance().getClientId());
-      getTokenRequest.setClientSecret(VippsConfiguration.getInstance().getClientSecret());
-      return VippsServices.getLoginServiceClientPost()
-          .executeFormRequestAsync(
-              getRequestPath(), "POST", getTokenRequest, OauthTokenResponse.class);
+      getTokenRequest.setClientId(vippsConfigurationOptions.getClientId());
+      getTokenRequest.setClientSecret(vippsConfigurationOptions.getClientSecret());
+      return loginServiceClientPost.executeFormRequestAsync(
+          getRequestPath(), "POST", getTokenRequest, OauthTokenResponse.class);
     }
-    return VippsServices.getLoginServiceClientBasic()
-        .executeFormRequestAsync(
-            getRequestPath(), "POST", getTokenRequest, OauthTokenResponse.class);
+    return loginServiceClientBasic.executeFormRequestAsync(
+        getRequestPath(), "POST", getTokenRequest, OauthTokenResponse.class);
   }
 
-  public static InitCibaResponse InitCiba(
+  public InitCibaResponse InitCiba(
       InitCibaRequest initCibaRequest, AuthenticationMethod authenticationMethod) {
     InitCibaBody initCibaBody =
         InitCibaBody.builder()
@@ -73,16 +87,16 @@ public class LoginService {
     }
 
     if (authenticationMethod == AuthenticationMethod.Post) {
-      initCibaBody.setClientId(VippsConfiguration.getInstance().getClientId());
-      initCibaBody.setClientSecret(VippsConfiguration.getInstance().getClientSecret());
-      return VippsServices.getLoginServiceClientPost()
-          .executeFormRequest(getCibaRequestPath(), "POST", initCibaBody, InitCibaResponse.class);
+      initCibaBody.setClientId(vippsConfigurationOptions.getClientId());
+      initCibaBody.setClientSecret(vippsConfigurationOptions.getClientSecret());
+      return loginServiceClientPost.executeFormRequest(
+          getCibaRequestPath(), "POST", initCibaBody, InitCibaResponse.class);
     }
-    return VippsServices.getLoginServiceClientBasic()
-        .executeFormRequest(getCibaRequestPath(), "POST", initCibaBody, InitCibaResponse.class);
+    return loginServiceClientBasic.executeFormRequest(
+        getCibaRequestPath(), "POST", initCibaBody, InitCibaResponse.class);
   }
 
-  public static CompletableFuture<InitCibaResponse> InitCibaAsync(
+  public CompletableFuture<InitCibaResponse> InitCibaAsync(
       InitCibaRequest initCibaRequest, AuthenticationMethod authenticationMethod) {
     InitCibaBody initCibaBody =
         InitCibaBody.builder()
@@ -98,18 +112,16 @@ public class LoginService {
     }
 
     if (authenticationMethod == AuthenticationMethod.Post) {
-      initCibaBody.setClientId(VippsConfiguration.getInstance().getClientId());
-      initCibaBody.setClientSecret(VippsConfiguration.getInstance().getClientSecret());
-      return VippsServices.getLoginServiceClientPost()
-          .executeFormRequestAsync(
-              getCibaRequestPath(), "POST", initCibaBody, InitCibaResponse.class);
+      initCibaBody.setClientId(vippsConfigurationOptions.getClientId());
+      initCibaBody.setClientSecret(vippsConfigurationOptions.getClientSecret());
+      return loginServiceClientPost.executeFormRequestAsync(
+          getCibaRequestPath(), "POST", initCibaBody, InitCibaResponse.class);
     }
-    return VippsServices.getLoginServiceClientBasic()
-        .executeFormRequestAsync(
-            getCibaRequestPath(), "POST", initCibaBody, InitCibaResponse.class);
+    return loginServiceClientBasic.executeFormRequestAsync(
+        getCibaRequestPath(), "POST", initCibaBody, InitCibaResponse.class);
   }
 
-  public static OauthTokenResponse GetCibaTokenNoRedirect(
+  public OauthTokenResponse GetCibaTokenNoRedirect(
       String authReqId, AuthenticationMethod authenticationMethod) {
     CibaTokenNoRedirectRequest cibaTokenRequest =
         CibaTokenNoRedirectRequest.builder()
@@ -117,16 +129,16 @@ public class LoginService {
             .grantType("urn:openid:params:grant-type:ciba")
             .build();
     if (authenticationMethod == AuthenticationMethod.Post) {
-      cibaTokenRequest.setClientId(VippsConfiguration.getInstance().getClientId());
-      cibaTokenRequest.setClientSecret(VippsConfiguration.getInstance().getClientSecret());
-      return VippsServices.getLoginServiceClientPost()
-          .executeFormRequest(getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
+      cibaTokenRequest.setClientId(vippsConfigurationOptions.getClientId());
+      cibaTokenRequest.setClientSecret(vippsConfigurationOptions.getClientSecret());
+      return loginServiceClientPost.executeFormRequest(
+          getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
     }
-    return VippsServices.getLoginServiceClientBasic()
-        .executeFormRequest(getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
+    return loginServiceClientBasic.executeFormRequest(
+        getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
   }
 
-  public static CompletableFuture<OauthTokenResponse> GetCibaTokenNoRedirectAsync(
+  public CompletableFuture<OauthTokenResponse> GetCibaTokenNoRedirectAsync(
       String authReqId, AuthenticationMethod authenticationMethod) {
     CibaTokenNoRedirectRequest cibaTokenRequest =
         CibaTokenNoRedirectRequest.builder()
@@ -134,18 +146,16 @@ public class LoginService {
             .grantType("urn:openid:params:grant-type:ciba")
             .build();
     if (authenticationMethod == AuthenticationMethod.Post) {
-      cibaTokenRequest.setClientId(VippsConfiguration.getInstance().getClientId());
-      cibaTokenRequest.setClientSecret(VippsConfiguration.getInstance().getClientSecret());
-      return VippsServices.getLoginServiceClientPost()
-          .executeFormRequestAsync(
-              getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
+      cibaTokenRequest.setClientId(vippsConfigurationOptions.getClientId());
+      cibaTokenRequest.setClientSecret(vippsConfigurationOptions.getClientSecret());
+      return loginServiceClientPost.executeFormRequestAsync(
+          getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
     }
-    return VippsServices.getLoginServiceClientBasic()
-        .executeFormRequestAsync(
-            getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
+    return loginServiceClientBasic.executeFormRequestAsync(
+        getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
   }
 
-  public static OauthTokenResponse GetCibaTokenRedirect(
+  public OauthTokenResponse GetCibaTokenRedirect(
       String code, AuthenticationMethod authenticationMethod) {
     CibaTokenRedirectRequest cibaTokenRequest =
         CibaTokenRedirectRequest.builder()
@@ -153,16 +163,16 @@ public class LoginService {
             .grantType("urn:vipps:params:grant-type:ciba-redirect")
             .build();
     if (authenticationMethod == AuthenticationMethod.Post) {
-      cibaTokenRequest.setClientId(VippsConfiguration.getInstance().getClientId());
-      cibaTokenRequest.setClientSecret(VippsConfiguration.getInstance().getClientSecret());
-      return VippsServices.getLoginServiceClientPost()
-          .executeFormRequest(getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
+      cibaTokenRequest.setClientId(vippsConfigurationOptions.getClientId());
+      cibaTokenRequest.setClientSecret(vippsConfigurationOptions.getClientSecret());
+      return loginServiceClientPost.executeFormRequest(
+          getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
     }
-    return VippsServices.getLoginServiceClientBasic()
-        .executeFormRequest(getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
+    return loginServiceClientBasic.executeFormRequest(
+        getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
   }
 
-  public static CompletableFuture<OauthTokenResponse> GetCibaTokenRedirectAsync(
+  public CompletableFuture<OauthTokenResponse> GetCibaTokenRedirectAsync(
       String code, AuthenticationMethod authenticationMethod) {
     CibaTokenRedirectRequest cibaTokenRequest =
         CibaTokenRedirectRequest.builder()
@@ -170,24 +180,22 @@ public class LoginService {
             .grantType("urn:vipps:params:grant-type:ciba-redirect")
             .build();
     if (authenticationMethod == AuthenticationMethod.Post) {
-      cibaTokenRequest.setClientId(VippsConfiguration.getInstance().getClientId());
-      cibaTokenRequest.setClientSecret(VippsConfiguration.getInstance().getClientSecret());
-      return VippsServices.getLoginServiceClientPost()
-          .executeFormRequestAsync(
-              getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
+      cibaTokenRequest.setClientId(vippsConfigurationOptions.getClientId());
+      cibaTokenRequest.setClientSecret(vippsConfigurationOptions.getClientSecret());
+      return loginServiceClientPost.executeFormRequestAsync(
+          getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
     }
-    return VippsServices.getLoginServiceClientBasic()
-        .executeFormRequestAsync(
-            getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
+    return loginServiceClientBasic.executeFormRequestAsync(
+        getRequestPath(), "POST", cibaTokenRequest, OauthTokenResponse.class);
   }
 
-  private static String getRequestPath() {
-    return VippsConfiguration.getInstance().getBaseUrl()
+  private String getRequestPath() {
+    return UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode())
         + "/access-management-1.0/access/oauth2/token";
   }
 
-  private static String getCibaRequestPath() {
-    return VippsConfiguration.getInstance().getBaseUrl()
+  private String getCibaRequestPath() {
+    return UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode())
         + "/vipps-login-ciba/api/backchannel/authentication";
   }
 }

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import no.vipps.infrastructure.VippsConfiguration;
+import no.vipps.VippsApi;
 import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.login.AuthenticationMethod;
 import no.vipps.model.login.InitCibaRequest;
@@ -17,21 +17,21 @@ import org.junit.jupiter.api.Test;
 public class LoginServiceTests {
 
   private static final String CUSTOMER_PHONE_NUMBER = "47375750";
+  private static VippsApi vippsApi;
 
   @BeforeAll
   public static void authenticate() {
     Dotenv dotenv = Dotenv.configure().load();
-    VippsConfigurationOptions config =
-        VippsConfigurationOptions.builder()
-            .clientId(System.getenv("CLIENT_ID"))
-            .clientSecret(System.getenv("CLIENT_SECRET"))
-            .subscriptionKey(System.getenv("SUBSCRIPTION_KEY"))
-            .merchantSerialNumber(System.getenv("MERCHANT_SERIAL_NUMBER"))
-            .isUseTestMode(true)
-            .pluginName("Vipps.net.IntegrationTests")
+    VippsConfigurationOptions config = VippsConfigurationOptions.builder()
+            .clientId(dotenv.get("CLIENT_ID"))
+            .clientSecret(dotenv.get("CLIENT_SECRET"))
+            .subscriptionKey(dotenv.get("OCP_APIM_SUBSCRIPTION_KEY"))
+            .merchantSerialNumber(dotenv.get("MSN"))
+            .pluginName("Java-Sdk-Demo")
             .pluginVersion("1.0.0")
+            .isUseTestMode(true)
             .build();
-    VippsConfiguration.getInstance().configureVipps(config, null);
+    vippsApi = VippsApi.Create(config);
   }
 
   @Test
@@ -44,7 +44,7 @@ public class LoginServiceTests {
             .redirectUri("http://localhost:3000")
             .build();
     InitCibaResponse initCibaResponse =
-        LoginService.InitCiba(initCibaRequest, AuthenticationMethod.Post);
+        vippsApi.loginService().InitCiba(initCibaRequest, AuthenticationMethod.Post);
     assertNotNull(initCibaResponse.getAuthReqId());
     assertNotNull(initCibaResponse.getInterval());
     assertNotNull(initCibaResponse.getExpiresIn());
@@ -59,7 +59,7 @@ public class LoginServiceTests {
             .build();
 
     String redirectUri =
-        LoginService.GetStartLoginUri(startLoginUriRequest, AuthenticationMethod.Post);
+        vippsApi.loginService().GetStartLoginUri(startLoginUriRequest, AuthenticationMethod.Post);
     assertNotNull(redirectUri);
     assertTrue(redirectUri.contains("redirect_uri=http://localhost:3000"));
     assertTrue(redirectUri.contains("response_mode=form_post"));

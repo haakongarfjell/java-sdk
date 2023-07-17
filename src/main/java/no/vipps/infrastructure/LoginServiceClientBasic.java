@@ -9,8 +9,12 @@ import okhttp3.Headers;
 
 public class LoginServiceClientBasic extends BaseServiceClient {
 
-  public LoginServiceClientBasic(VippsClient vippsClient) {
+  private final VippsConfigurationOptions vippsConfigurationOptions;
+
+  public LoginServiceClientBasic(
+      VippsClient vippsClient, VippsConfigurationOptions vippsConfigurationOptions) {
     super(vippsClient);
+    this.vippsConfigurationOptions = vippsConfigurationOptions;
   }
 
   @Override
@@ -22,8 +26,8 @@ public class LoginServiceClientBasic extends BaseServiceClient {
                 Constants.HEADER_NAME_AUTHORIZATION,
                 "Basic "
                     + encodeCredentials(
-                        VippsConfiguration.getInstance().getClientId(),
-                        VippsConfiguration.getInstance().getClientSecret()));
+                        vippsConfigurationOptions.getClientId(),
+                        vippsConfigurationOptions.getClientSecret()));
           }
         });
   }

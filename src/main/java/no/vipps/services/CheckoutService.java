@@ -3,9 +3,9 @@ package no.vipps.services;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import no.vipps.helpers.UrlHelper;
 import no.vipps.infrastructure.CheckoutServiceClient;
-import no.vipps.infrastructure.VippsConfiguration;
-import no.vipps.infrastructure.VippsServices;
+import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.checkout.InitiateSessionRequest;
 import no.vipps.model.checkout.InitiateSessionResponse;
 import no.vipps.model.checkout.SessionResponse;
@@ -13,36 +13,54 @@ import no.vipps.model.checkout.SessionResponse;
 public class CheckoutService {
   private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-  public static InitiateSessionResponse initiateSession(
-      InitiateSessionRequest initiateSessionRequest) {
-    CheckoutServiceClient checkoutServiceClient = VippsServices.getCheckoutServiceClient();
-    String requestPath = VippsConfiguration.getInstance().getBaseUrl() + "/checkout/v3/session";
+  private final CheckoutServiceClient checkoutServiceClient;
 
+  private final VippsConfigurationOptions vippsConfigurationOptions;
+
+  public CheckoutService(
+      CheckoutServiceClient checkoutServiceClient,
+      VippsConfigurationOptions vippsConfigurationOptions) {
+    this.checkoutServiceClient = checkoutServiceClient;
+    this.vippsConfigurationOptions = vippsConfigurationOptions;
+  }
+
+  public InitiateSessionResponse initiateSession(InitiateSessionRequest initiateSessionRequest) {
     return checkoutServiceClient.executeRequest(
-        requestPath, "POST", initiateSessionRequest, InitiateSessionResponse.class);
+        getRequestPath(), "POST", initiateSessionRequest, InitiateSessionResponse.class);
   }
 
-  public static CompletableFuture<InitiateSessionResponse> initiateSessionAsync(
+  public CompletableFuture<InitiateSessionResponse> initiateSessionAsync(
       InitiateSessionRequest initiateSessionRequest) {
-    CheckoutServiceClient checkoutServiceClient = VippsServices.getCheckoutServiceClient();
-    String requestPath = VippsConfiguration.getInstance().getBaseUrl() + "/checkout/v3/session";
-
     return checkoutServiceClient.executeRequestAsync(
-        requestPath, "POST", initiateSessionRequest, InitiateSessionResponse.class);
+        getRequestPath(), "POST", initiateSessionRequest, InitiateSessionResponse.class);
   }
 
-  public static SessionResponse getSessionInfo(String reference) {
-    CheckoutServiceClient checkoutServiceClient = VippsServices.getCheckoutServiceClient();
-    String requestPath =
-        VippsConfiguration.getInstance().getBaseUrl() + "/checkout/v3/session/" + reference;
-    return checkoutServiceClient.executeRequest(requestPath, "GET", SessionResponse.class);
+  public SessionResponse getSessionInfo(String reference) {
+    return checkoutServiceClient.executeRequest(
+        getRequestPath(reference, ""), "GET", SessionResponse.class);
   }
 
-  public static CompletableFuture<SessionResponse> getSessionInfoAsync(String reference) {
-    CheckoutServiceClient checkoutServiceClient = VippsServices.getCheckoutServiceClient();
-    String requestPath =
-        VippsConfiguration.getInstance().getBaseUrl() + "/checkout/v3/session/" + reference;
+  public CompletableFuture<SessionResponse> getSessionInfoAsync(String reference) {
+    return checkoutServiceClient.executeRequestAsync(
+        getRequestPath(reference, ""), "GET", SessionResponse.class);
+  }
 
-    return checkoutServiceClient.executeRequestAsync(requestPath, "GET", SessionResponse.class);
+  private String getRequestPath() {
+    return UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode())
+        + "/checkout/v3/session/";
+  }
+
+  private String getRequestPath(String reference, String path) {
+    StringBuilder requestPath =
+        new StringBuilder(
+            UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode())
+                + "/checkout/v3/session/");
+    if (!reference.isEmpty()) {
+      requestPath.append("/").append(reference);
+    }
+    if (!path.isEmpty()) {
+      requestPath.append("/").append(path);
+    }
+    return requestPath.toString();
   }
 }

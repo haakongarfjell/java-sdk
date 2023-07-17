@@ -1,12 +1,14 @@
 package no.vippsdemo.demo;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import no.vipps.infrastructure.VippsConfiguration;
+import no.vipps.IVippsApi;
+import no.vipps.VippsApi;
 import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.checkout.UserFlow;
 import no.vipps.model.epayment.*;
 import no.vipps.model.login.*;
 import no.vipps.services.EpaymentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +22,9 @@ import java.util.concurrent.CompletableFuture;
 
 @Controller
 public class LoginController {
+    @Autowired
+    private VippsApi vippsApi;
+
 
     @RequestMapping(value = "/LoginUri", method = RequestMethod.GET)
     @ResponseBody
@@ -29,7 +34,7 @@ public class LoginController {
                 .redirectUri("http://localhost:3000")
                 .scope("openid email name phoneNumber")
                 .build();
-        return LoginService.GetStartLoginUri(startLoginUriRequest, AuthenticationMethod.Post);
+        return vippsApi.loginService().GetStartLoginUri(startLoginUriRequest, AuthenticationMethod.Post);
     }
 
     @RequestMapping(value = "/token", method = RequestMethod.POST)
@@ -40,7 +45,7 @@ public class LoginController {
                 .redirectUri("http://localhost:3000")
                 .code(code)
                 .build();
-        return LoginService.getWebLoginTokenAsync(getTokenRequest, AuthenticationMethod.Basic);
+        return vippsApi.loginService().getWebLoginTokenAsync(getTokenRequest, AuthenticationMethod.Post);
     }
 
     @RequestMapping(value = "/createPayment", method = RequestMethod.POST, produces = "application/json")
@@ -66,7 +71,7 @@ public class LoginController {
                         .scope("name phoneNumber address birthDate email")
                         .build())
                 .build();
-        CreatePaymentResponse response = EpaymentService.createPayment(request);
+        CreatePaymentResponse response = vippsApi.epaymentService().createPayment(request);
         return response;
     }
 
@@ -80,19 +85,19 @@ public class LoginController {
                 .redirectUri("http://localhost:3000")
                 .build();
 
-        return LoginService.InitCibaAsync(initCibaRequest, AuthenticationMethod.Basic);
+        return vippsApi.loginService().InitCibaAsync(initCibaRequest, AuthenticationMethod.Basic);
     }
 
     @RequestMapping(value = "/ciba-token-no-redirect", method = RequestMethod.POST)
     @ResponseBody
     public OauthTokenResponse GetCibaNoRedirect(@RequestParam("authReqId") String authReqId) {
-        return LoginService.GetCibaTokenNoRedirect(authReqId, AuthenticationMethod.Basic);
+        return vippsApi.loginService().GetCibaTokenNoRedirect(authReqId, AuthenticationMethod.Basic);
     }
 
     @RequestMapping(value = "/ciba-token-redirect", method = RequestMethod.POST)
     @ResponseBody
     public OauthTokenResponse GetCibaRedirect(@RequestParam("code") String code) {
-        return LoginService.GetCibaTokenRedirect(code, AuthenticationMethod.Basic);
+        return vippsApi.loginService().GetCibaTokenRedirect(code, AuthenticationMethod.Basic);
     }
 
 }

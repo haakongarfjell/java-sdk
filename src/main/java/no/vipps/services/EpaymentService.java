@@ -1,8 +1,9 @@
 package no.vipps.services;
 
 import java.util.concurrent.CompletableFuture;
-import no.vipps.infrastructure.VippsConfiguration;
-import no.vipps.infrastructure.VippsServices;
+import no.vipps.helpers.UrlHelper;
+import no.vipps.infrastructure.EpaymentServiceClient;
+import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.epayment.CaptureModificationRequest;
 import no.vipps.model.epayment.CreatePaymentRequest;
 import no.vipps.model.epayment.CreatePaymentResponse;
@@ -14,118 +15,122 @@ import no.vipps.model.epayment.RefundModificationRequest;
 
 public class EpaymentService {
 
-  public static CreatePaymentResponse createPayment(CreatePaymentRequest createPaymentRequest) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequest(
-            getRequestPath(), "POST", createPaymentRequest, CreatePaymentResponse.class);
+  private final EpaymentServiceClient epaymentServiceClient;
+
+  private final VippsConfigurationOptions vippsConfigurationOptions;
+
+  public EpaymentService(
+      EpaymentServiceClient epaymentServiceClient,
+      VippsConfigurationOptions vippsConfigurationOptions) {
+    this.epaymentServiceClient = epaymentServiceClient;
+    this.vippsConfigurationOptions = vippsConfigurationOptions;
   }
 
-  public static CompletableFuture<CreatePaymentResponse> createPaymentAsync(
+  public CreatePaymentResponse createPayment(CreatePaymentRequest createPaymentRequest) {
+    return epaymentServiceClient.executeRequest(
+        getRequestPath(), "POST", createPaymentRequest, CreatePaymentResponse.class);
+  }
+
+  public CompletableFuture<CreatePaymentResponse> createPaymentAsync(
       CreatePaymentRequest createPaymentRequest) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequestAsync(
-            getRequestPath(), "POST", createPaymentRequest, CreatePaymentResponse.class);
+    return epaymentServiceClient.executeRequestAsync(
+        getRequestPath(), "POST", createPaymentRequest, CreatePaymentResponse.class);
   }
 
-  public static GetPaymentResponse getPayment(String reference) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath(reference, ""), "GET", GetPaymentResponse.class);
+  public GetPaymentResponse getPayment(String reference) {
+    return epaymentServiceClient.executeRequest(
+        getRequestPath(reference, ""), "GET", GetPaymentResponse.class);
   }
 
-  public static CompletableFuture<GetPaymentResponse> getPaymentAsync(String reference) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequestAsync(getRequestPath(reference, ""), "GET", GetPaymentResponse.class);
+  public CompletableFuture<GetPaymentResponse> getPaymentAsync(String reference) {
+    return epaymentServiceClient.executeRequestAsync(
+        getRequestPath(reference, ""), "GET", GetPaymentResponse.class);
   }
 
-  public static PaymentEvent[] getPaymentEventLog(String reference) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath(reference, "events"), "GET", PaymentEvent[].class);
+  public PaymentEvent[] getPaymentEventLog(String reference) {
+    return epaymentServiceClient.executeRequest(
+        getRequestPath(reference, "events"), "GET", PaymentEvent[].class);
   }
 
-  public static CompletableFuture<PaymentEvent[]> getPaymentEventLogAsync(String reference) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequestAsync(getRequestPath(reference, "events"), "GET", PaymentEvent[].class);
+  public CompletableFuture<PaymentEvent[]> getPaymentEventLogAsync(String reference) {
+    return epaymentServiceClient.executeRequestAsync(
+        getRequestPath(reference, "events"), "GET", PaymentEvent[].class);
   }
 
-  public static ModificationResponse cancelPayment(String reference) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequest(getRequestPath(reference, "cancel"), "POST", ModificationResponse.class);
+  public ModificationResponse cancelPayment(String reference) {
+    return epaymentServiceClient.executeRequest(
+        getRequestPath(reference, "cancel"), "POST", ModificationResponse.class);
   }
 
-  public static CompletableFuture<ModificationResponse> cancelPaymentAsync(String reference) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequestAsync(
-            getRequestPath(reference, "cancel"), "POST", ModificationResponse.class);
+  public CompletableFuture<ModificationResponse> cancelPaymentAsync(String reference) {
+    return epaymentServiceClient.executeRequestAsync(
+        getRequestPath(reference, "cancel"), "POST", ModificationResponse.class);
   }
 
-  public static ModificationResponse capturePayment(
+  public ModificationResponse capturePayment(
       String reference, CaptureModificationRequest captureModificationRequest) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequest(
-            getRequestPath(reference, "capture"),
-            "POST",
-            captureModificationRequest,
-            ModificationResponse.class);
+    return epaymentServiceClient.executeRequest(
+        getRequestPath(reference, "capture"),
+        "POST",
+        captureModificationRequest,
+        ModificationResponse.class);
   }
 
-  public static CompletableFuture<ModificationResponse> capturePaymentAsync(
+  public CompletableFuture<ModificationResponse> capturePaymentAsync(
       String reference, CaptureModificationRequest captureModificationRequest) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequestAsync(
-            getRequestPath(reference, "capture"),
-            "POST",
-            captureModificationRequest,
-            ModificationResponse.class);
+    return epaymentServiceClient.executeRequestAsync(
+        getRequestPath(reference, "capture"),
+        "POST",
+        captureModificationRequest,
+        ModificationResponse.class);
   }
 
-  public static ModificationResponse refundPayment(
+  public ModificationResponse refundPayment(
       String reference, RefundModificationRequest refundModificationRequest) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequest(
-            getRequestPath(reference, "refund"),
-            "POST",
-            refundModificationRequest,
-            ModificationResponse.class);
+    return epaymentServiceClient.executeRequest(
+        getRequestPath(reference, "refund"),
+        "POST",
+        refundModificationRequest,
+        ModificationResponse.class);
   }
 
-  public static CompletableFuture<ModificationResponse> refundPaymentAsync(
+  public CompletableFuture<ModificationResponse> refundPaymentAsync(
       String reference, RefundModificationRequest refundModificationRequest) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequestAsync(
-            getRequestPath(reference, "refund"),
-            "POST",
-            refundModificationRequest,
-            ModificationResponse.class);
+    return epaymentServiceClient.executeRequestAsync(
+        getRequestPath(reference, "refund"),
+        "POST",
+        refundModificationRequest,
+        ModificationResponse.class);
   }
 
-  public static void forceApprovePayment(String reference, ForceApprove forceApproveRequest) {
-    VippsServices.getEpaymentServiceClient()
-        .executeRequest(
-            (VippsConfiguration.getInstance().getBaseUrl()
-                + "/epayment/v1/test/payments/"
-                + reference
-                + "/approve"),
-            "POST",
-            forceApproveRequest,
-            null);
+  public void forceApprovePayment(String reference, ForceApprove forceApproveRequest) {
+    epaymentServiceClient.executeRequest(
+        (UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode())
+            + "/epayment/v1/test/payments/"
+            + reference
+            + "/approve"),
+        "POST",
+        forceApproveRequest,
+        null);
   }
 
-  public static CompletableFuture<Void> forceApprovePaymentAsync(
+  public CompletableFuture<Void> forceApprovePaymentAsync(
       String reference, ForceApprove forceApproveRequest) {
-    return VippsServices.getEpaymentServiceClient()
-        .executeRequestAsync(
-            (VippsConfiguration.getInstance().getBaseUrl()
-                + "/epayment/v1/test/payments/"
-                + reference
-                + "/approve"),
-            "POST",
-            forceApproveRequest,
-            null);
+    return epaymentServiceClient.executeRequestAsync(
+        (UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode())
+            + "/epayment/v1/test/payments/"
+            + reference
+            + "/approve"),
+        "POST",
+        forceApproveRequest,
+        null);
   }
 
-  private static String getRequestPath(String reference, String path) {
+  private String getRequestPath(String reference, String path) {
     StringBuilder requestPath =
-        new StringBuilder(VippsConfiguration.getInstance().getBaseUrl() + "/epayment/v1/payments");
+        new StringBuilder(
+            UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode())
+                + "/epayment/v1/payments");
     if (!reference.isEmpty()) {
       requestPath.append("/").append(reference);
     }
@@ -135,7 +140,8 @@ public class EpaymentService {
     return requestPath.toString();
   }
 
-  private static String getRequestPath() {
-    return VippsConfiguration.getInstance().getBaseUrl() + "/epayment/v1/payments";
+  private String getRequestPath() {
+    return UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode())
+        + "/epayment/v1/payments";
   }
 }

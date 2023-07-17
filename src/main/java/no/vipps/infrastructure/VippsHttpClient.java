@@ -17,21 +17,21 @@ public class VippsHttpClient implements VippsClient {
   private static final Duration DEFAULT_TIMEOUT = Duration.of(100, ChronoUnit.SECONDS);
   private OkHttpClient httpClient;
 
-  public VippsHttpClient() {
+  private final VippsConfigurationOptions vippsConfigurationOptions;
+
+  public VippsHttpClient(VippsConfigurationOptions vippsConfigurationOptions) {
     this.httpClient = createDefaultOkHttpClient();
+    this.vippsConfigurationOptions = vippsConfigurationOptions;
   }
 
-  private static Headers getHeaders() {
+  private Headers getHeaders() {
 
     HashMap<String, String> headers = new HashMap<>();
-    // headers.put("Ocp-Apim-Subscription-Key",
-    // VippsConfiguration.getInstance().getSubscriptionKey());
-    headers.put(
-        "Merchant-Serial-Number", VippsConfiguration.getInstance().getMerchantSerialNumber());
-    headers.put("Vipps-System-Name", VippsConfiguration.getInstance().getSystemName());
-    headers.put("Vipps-System-Version", VippsConfiguration.getInstance().getSystemVersion());
-    headers.put("Vipps-System-Plugin-Name", VippsConfiguration.getInstance().getPluginName());
-    headers.put("Vipps-System-Plugin-Version", VippsConfiguration.getInstance().getPluginVersion());
+    headers.put("Merchant-Serial-Number", vippsConfigurationOptions.getMerchantSerialNumber());
+    headers.put("Vipps-System-Name", vippsConfigurationOptions.getSystemName());
+    headers.put("Vipps-System-Version", vippsConfigurationOptions.getSystemVersion());
+    headers.put("Vipps-System-Plugin-Name", vippsConfigurationOptions.getPluginName());
+    headers.put("Vipps-System-Plugin-Version", vippsConfigurationOptions.getPluginVersion());
 
     return Headers.of(headers);
   }

@@ -7,7 +7,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import no.vipps.infrastructure.VippsConfiguration;
+
+import no.vipps.VippsApi;
 import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.checkout.Amount;
 import no.vipps.model.checkout.ExternalSessionState;
@@ -22,20 +23,21 @@ import org.junit.jupiter.api.Test;
 
 public class CheckoutServiceTests {
 
+  private static VippsApi vippsApi;
+
   @BeforeAll
   public static void authenticate() {
     Dotenv dotenv = Dotenv.configure().load();
-    VippsConfigurationOptions config =
-        VippsConfigurationOptions.builder()
-            .clientId(System.getenv("CLIENT_ID"))
-            .clientSecret(System.getenv("CLIENT_SECRET"))
-            .subscriptionKey(System.getenv("SUBSCRIPTION_KEY"))
-            .merchantSerialNumber(System.getenv("MERCHANT_SERIAL_NUMBER"))
-            .isUseTestMode(true)
-            .pluginName("Vipps.net.IntegrationTests")
+    VippsConfigurationOptions config = VippsConfigurationOptions.builder()
+            .clientId(dotenv.get("CLIENT_ID"))
+            .clientSecret(dotenv.get("CLIENT_SECRET"))
+            .subscriptionKey(dotenv.get("OCP_APIM_SUBSCRIPTION_KEY"))
+            .merchantSerialNumber(dotenv.get("MSN"))
+            .pluginName("Java-Sdk-Demo")
             .pluginVersion("1.0.0")
+            .isUseTestMode(true)
             .build();
-    VippsConfiguration.getInstance().configureVipps(config, null);
+    vippsApi = VippsApi.Create(config);
   }
 
   @Test
@@ -59,10 +61,10 @@ public class CheckoutServiceTests {
             .build();
 
     InitiateSessionResponse sessionResponse =
-        CheckoutService.initiateSession(sessionInitiationRequest);
+        vippsApi.checkoutService().initiateSession(sessionInitiationRequest);
     assertNotNull(sessionResponse);
 
-    SessionResponse sessionPolledResponse = CheckoutService.getSessionInfo(reference);
+    SessionResponse sessionPolledResponse = vippsApi.checkoutService().getSessionInfo(reference);
     assertEquals(ExternalSessionState.SessionCreated, sessionPolledResponse.getSessionState());
   }
 
@@ -87,11 +89,11 @@ public class CheckoutServiceTests {
             .build();
 
     CompletableFuture<InitiateSessionResponse> sessionResponse =
-        CheckoutService.initiateSessionAsync(sessionInitiationRequest);
+            vippsApi.checkoutService().initiateSessionAsync(sessionInitiationRequest);
     assertNotNull(sessionResponse.get());
 
     CompletableFuture<SessionResponse> sessionPolledResponse =
-        CheckoutService.getSessionInfoAsync(reference);
+            vippsApi.checkoutService().getSessionInfoAsync(reference);
     assertEquals(
         ExternalSessionState.SessionCreated, sessionPolledResponse.get().getSessionState());
   }

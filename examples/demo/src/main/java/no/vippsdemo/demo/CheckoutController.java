@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import no.vipps.infrastructure.VippsConfiguration;
 import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.checkout.Amount;
 import no.vipps.model.checkout.InitiateSessionRequest;
@@ -31,7 +30,7 @@ import no.vipps.services.CheckoutService;
 
 @Controller
 public class CheckoutController {
-
+ /*
   @RequestMapping(value = "/checkout", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
   @ResponseBody
   public InitiateSessionResponse checkout(@RequestBody StartCheckoutRequest body) {
@@ -96,5 +95,5 @@ public class CheckoutController {
     options.add(postNordOption);
     return options;
   }
-
+*/
 }

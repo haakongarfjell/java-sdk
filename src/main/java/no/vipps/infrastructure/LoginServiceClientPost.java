@@ -6,8 +6,12 @@ import okhttp3.Headers;
 
 public class LoginServiceClientPost extends BaseServiceClient {
 
-  public LoginServiceClientPost(VippsClient vippsClient) {
+  private final VippsConfigurationOptions vippsConfigurationOptions;
+
+  public LoginServiceClientPost(
+      VippsClient vippsClient, VippsConfigurationOptions vippsConfigurationOptions) {
     super(vippsClient);
+    this.vippsConfigurationOptions = vippsConfigurationOptions;
   }
 
   @Override
