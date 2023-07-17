@@ -12,6 +12,4 @@ public class StartLoginUriRequest {
   private String scope;
 
   private String redirectUri;
-
-  private AuthenticationMethod authenticationMethod;
 }

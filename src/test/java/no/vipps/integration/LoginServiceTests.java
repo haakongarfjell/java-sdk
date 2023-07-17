@@ -14,9 +14,6 @@ import no.vipps.services.LoginService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
 public class LoginServiceTests {
 
   private static final String CUSTOMER_PHONE_NUMBER = "47375750";
@@ -58,11 +55,11 @@ public class LoginServiceTests {
     StartLoginUriRequest startLoginUriRequest =
         StartLoginUriRequest.builder()
             .scope("openid email")
-            .authenticationMethod(AuthenticationMethod.Post)
             .redirectUri("http://localhost:3000")
             .build();
 
-    String redirectUri = LoginService.GetStartLoginUri(startLoginUriRequest);
+    String redirectUri =
+        LoginService.GetStartLoginUri(startLoginUriRequest, AuthenticationMethod.Post);
     assertNotNull(redirectUri);
     assertTrue(redirectUri.contains("redirect_uri=http://localhost:3000"));
     assertTrue(redirectUri.contains("response_mode=form_post"));

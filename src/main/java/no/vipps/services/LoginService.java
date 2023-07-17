@@ -8,7 +8,8 @@ import no.vipps.model.login.*;
 
 public class LoginService {
 
-  public static String GetStartLoginUri(StartLoginUriRequest startLoginUriRequest) {
+  public static String GetStartLoginUri(
+      StartLoginUriRequest startLoginUriRequest, AuthenticationMethod authenticationMethod) {
     String startLoginUri =
         VippsConfiguration.getInstance().getBaseUrl()
             + "/access-management-1.0/access/oauth2/auth"
@@ -22,7 +23,7 @@ public class LoginService {
             + "&redirect_uri="
             + startLoginUriRequest.getRedirectUri();
 
-    if (startLoginUriRequest.getAuthenticationMethod() == AuthenticationMethod.Post) {
+    if (authenticationMethod == AuthenticationMethod.Post) {
       startLoginUri += "&response_mode=form_post";
     }
     return startLoginUri;

@@ -26,11 +26,10 @@ public class LoginController {
     public String GetStartLoginUri()
     {
         StartLoginUriRequest startLoginUriRequest = StartLoginUriRequest.builder()
-                .authenticationMethod(AuthenticationMethod.Basic)
                 .redirectUri("http://localhost:3000")
                 .scope("openid email name phoneNumber")
                 .build();
-        return LoginService.GetStartLoginUri(startLoginUriRequest);
+        return LoginService.GetStartLoginUri(startLoginUriRequest, AuthenticationMethod.Post);
     }
 
     @RequestMapping(value = "/token", method = RequestMethod.POST)
