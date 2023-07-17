@@ -3,6 +3,7 @@ package no.vipps.integration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -23,6 +24,7 @@ public class CheckoutServiceTests {
 
   @BeforeAll
   public static void authenticate() {
+    Dotenv dotenv = Dotenv.configure().load();
     VippsConfigurationOptions config =
         VippsConfigurationOptions.builder()
             .clientId(System.getenv("CLIENT_ID"))

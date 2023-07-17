@@ -47,3 +47,4 @@ bin/
 .DS_Store
 /api-specs/
 examples/demo/.env
+.env
