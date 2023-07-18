@@ -4,7 +4,6 @@ import no.vipps.infrastructure.*;
 import no.vipps.services.AccessTokenService;
 import no.vipps.services.CheckoutService;
 import no.vipps.services.EpaymentService;
-import no.vipps.services.LoginService;
 
 public class VippsApi implements IVippsApi {
 
@@ -24,14 +23,6 @@ public class VippsApi implements IVippsApi {
 
   public static VippsApi Create(VippsConfigurationOptions vippsConfigurationOptions) {
     return new VippsApi(vippsConfigurationOptions);
-  }
-
-  @Override
-  public LoginService loginService() {
-    return new LoginService(
-        new LoginServiceClientBasic(vippsClient, vippsConfigurationOptions),
-        new LoginServiceClientPost(vippsClient, vippsConfigurationOptions),
-        vippsConfigurationOptions);
   }
 
   @Override
