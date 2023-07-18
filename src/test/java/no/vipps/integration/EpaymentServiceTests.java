@@ -1,33 +1,18 @@
 package no.vipps.integration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import no.vipps.VippsApi;
+import no.vipps.infrastructure.VippsConfigurationOptions;
+import no.vipps.model.epayment.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import no.vipps.VippsApi;
-import no.vipps.infrastructure.VippsConfigurationOptions;
-import no.vipps.model.epayment.Amount;
-import no.vipps.model.epayment.CaptureModificationRequest;
-import no.vipps.model.epayment.CreatePaymentRequest;
-import no.vipps.model.epayment.CreatePaymentRequestUserFlow;
-import no.vipps.model.epayment.CreatePaymentResponse;
-import no.vipps.model.epayment.Currency;
-import no.vipps.model.epayment.Customer;
-import no.vipps.model.epayment.ForceApprove;
-import no.vipps.model.epayment.GetPaymentResponse;
-import no.vipps.model.epayment.ModificationResponse;
-import no.vipps.model.epayment.PaymentEvent;
-import no.vipps.model.epayment.PaymentEventName;
-import no.vipps.model.epayment.PaymentMethod;
-import no.vipps.model.epayment.PaymentMethodType;
-import no.vipps.model.epayment.RefundModificationRequest;
-import no.vipps.model.epayment.State;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class EpaymentServiceTests {
 
@@ -37,16 +22,15 @@ public class EpaymentServiceTests {
 
   @BeforeAll
   public static void authenticate() {
-    Dotenv dotenv = Dotenv.configure().load();
     VippsConfigurationOptions config =
         VippsConfigurationOptions.builder()
-            .clientId(dotenv.get("CLIENT_ID"))
-            .clientSecret(dotenv.get("CLIENT_SECRET"))
-            .subscriptionKey(dotenv.get("OCP_APIM_SUBSCRIPTION_KEY"))
-            .merchantSerialNumber(dotenv.get("MSN"))
-            .pluginName("Java-Sdk-Demo")
-            .pluginVersion("1.0.0")
-            .isUseTestMode(true)
+              .clientId(System.getenv("CLIENT_ID"))
+              .clientSecret(System.getenv("CLIENT_SECRET"))
+              .subscriptionKey(System.getenv("SUBSCRIPTION_KEY"))
+              .merchantSerialNumber(System.getenv("MERCHANT_SERIAL_NUMBER"))
+              .isUseTestMode(true)
+              .pluginName("Vipps.net.IntegrationTests")
+              .pluginVersion("1.0.0")
             .build();
     vippsApi = VippsApi.Create(config);
   }

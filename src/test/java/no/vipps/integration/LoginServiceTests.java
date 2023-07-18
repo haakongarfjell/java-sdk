@@ -1,9 +1,5 @@
 package no.vipps.integration;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import io.github.cdimascio.dotenv.Dotenv;
 import no.vipps.VippsApi;
 import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.login.AuthenticationMethod;
@@ -13,6 +9,9 @@ import no.vipps.model.login.StartLoginUriRequest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class LoginServiceTests {
 
   private static final String CUSTOMER_PHONE_NUMBER = "47375750";
@@ -20,16 +19,15 @@ public class LoginServiceTests {
 
   @BeforeAll
   public static void authenticate() {
-    Dotenv dotenv = Dotenv.configure().load();
     VippsConfigurationOptions config =
         VippsConfigurationOptions.builder()
-            .clientId(dotenv.get("CLIENT_ID"))
-            .clientSecret(dotenv.get("CLIENT_SECRET"))
-            .subscriptionKey(dotenv.get("OCP_APIM_SUBSCRIPTION_KEY"))
-            .merchantSerialNumber(dotenv.get("MSN"))
-            .pluginName("Java-Sdk-Demo")
-            .pluginVersion("1.0.0")
-            .isUseTestMode(true)
+              .clientId(System.getenv("CLIENT_ID"))
+              .clientSecret(System.getenv("CLIENT_SECRET"))
+              .subscriptionKey(System.getenv("SUBSCRIPTION_KEY"))
+              .merchantSerialNumber(System.getenv("MERCHANT_SERIAL_NUMBER"))
+              .isUseTestMode(true)
+              .pluginName("Vipps.net.IntegrationTests")
+              .pluginVersion("1.0.0")
             .build();
     vippsApi = VippsApi.Create(config);
   }
