@@ -48,7 +48,6 @@ public class VippsHttpClient implements VippsClient {
             .newBuilder()
             .headers(request.headers().newBuilder().addAll(getHeaders()).build())
             .build();
-    int i = 0;
     try (Response response = httpClient.newCall(modifiedRequest).execute()) {
       if (!response.isSuccessful()) {
         throw new IOException("Unexpected response " + response + ": " + response.body().string());
