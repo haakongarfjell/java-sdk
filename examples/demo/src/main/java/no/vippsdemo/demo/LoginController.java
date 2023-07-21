@@ -2,6 +2,7 @@ package no.vippsdemo.demo;
 import no.vipps.VippsApi;
 import no.vipps.model.epayment.*;
 import no.vipps.model.login.*;
+import no.vipps.model.webhooks.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -19,6 +22,27 @@ public class LoginController {
     @Autowired
     private VippsApi vippsApi;
 
+    @RequestMapping(value = "/GetWebhooks", method = RequestMethod.GET)
+    @ResponseBody
+    public QueryResponse GetWebhooks() {
+        return vippsApi.webhooksService().GetWebhooks();
+    }
+
+    @RequestMapping(value = "/DeleteWebhook", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void DeleteWebhook(@RequestParam("webhookId") String webhookId) {
+        vippsApi.webhooksService().DeleteWebhook(webhookId);
+    }
+
+    @RequestMapping(value = "/CreateWebhook", method = RequestMethod.POST)
+    @ResponseBody
+    public RegisterResponse CreateWebhook() {
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .url("https://webhook.site/ebcd8e27-5031-4dd5-beb7-a2d491cd7641")
+                .events(List.of(WebhookEvent.EPaymentCreated))
+                .build();
+        return vippsApi.webhooksService().CreateWebHook(registerRequest);
+    }
 
     @RequestMapping(value = "/LoginUri", method = RequestMethod.GET)
     @ResponseBody
@@ -79,19 +103,19 @@ public class LoginController {
                 .redirectUri("http://localhost:3000")
                 .build();
 
-        return vippsApi.loginService().InitCibaAsync(initCibaRequest, AuthenticationMethod.Basic);
+        return vippsApi.loginService().InitCibaAsync(initCibaRequest, AuthenticationMethod.Post);
     }
 
     @RequestMapping(value = "/ciba-token-no-redirect", method = RequestMethod.POST)
     @ResponseBody
     public OauthTokenResponse GetCibaNoRedirect(@RequestParam("authReqId") String authReqId) {
-        return vippsApi.loginService().GetCibaTokenNoRedirect(authReqId, AuthenticationMethod.Basic);
+        return vippsApi.loginService().GetCibaTokenNoRedirect(authReqId, AuthenticationMethod.Post);
     }
 
     @RequestMapping(value = "/ciba-token-redirect", method = RequestMethod.POST)
     @ResponseBody
     public OauthTokenResponse GetCibaRedirect(@RequestParam("code") String code) {
-        return vippsApi.loginService().GetCibaTokenRedirect(code, AuthenticationMethod.Basic);
+        return vippsApi.loginService().GetCibaTokenRedirect(code, AuthenticationMethod.Post);
     }
 
 }
