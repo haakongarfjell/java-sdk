@@ -1,10 +1,7 @@
 package no.vipps;
 
 import no.vipps.infrastructure.*;
-import no.vipps.services.AccessTokenService;
-import no.vipps.services.CheckoutService;
-import no.vipps.services.EpaymentService;
-import no.vipps.services.LoginService;
+import no.vipps.services.*;
 
 public class VippsApi implements IVippsApi {
 
@@ -45,6 +42,13 @@ public class VippsApi implements IVippsApi {
   public EpaymentService epaymentService() {
     return new EpaymentService(
         new EpaymentServiceClient(vippsClient, accessTokenService, vippsConfigurationOptions),
+        vippsConfigurationOptions);
+  }
+
+  @Override
+  public WebhooksService webhooksService() {
+    return new WebhooksService(
+        new WebhooksServiceClient(vippsClient, accessTokenService, vippsConfigurationOptions),
         vippsConfigurationOptions);
   }
 

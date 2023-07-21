@@ -1,5 +1,7 @@
 package no.vipps.infrastructure;
 
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import lombok.Getter;
 import no.vipps.helpers.FormUrlEncoder;
 import no.vipps.helpers.VippsRequestSerializer;
@@ -9,9 +11,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 public abstract class BaseServiceClient {
   private static MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");

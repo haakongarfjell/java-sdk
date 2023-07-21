@@ -10,5 +10,7 @@ public interface IVippsApi {
 
   EpaymentService epaymentService();
 
+  WebhooksService webhooksService();
+
   AccessTokenService accessTokenService();
 }

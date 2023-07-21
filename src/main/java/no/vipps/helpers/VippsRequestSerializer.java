@@ -25,16 +25,20 @@ public class VippsRequestSerializer {
   }
 
   public static <T> T deserializeVippsResponse(String vippsResponse, Class<T> responseType) {
-    try {
-      T deserializedTyped = objectMapper.readValue(vippsResponse, responseType);
-      if (deserializedTyped == null) {
+    if (!vippsResponse.isEmpty()) {
+      try {
+        T deserializedTyped = objectMapper.readValue(vippsResponse, responseType);
+        if (deserializedTyped == null) {
+          throw new VippsTechnicalException(
+              "Response could not be deserialized to " + responseType.getSimpleName());
+        }
+        return deserializedTyped;
+      } catch (Exception e) {
         throw new VippsTechnicalException(
-            "Response could not be deserialized to " + responseType.getSimpleName());
+            "Error deserializing response of type " + responseType.getSimpleName(), e);
       }
-      return deserializedTyped;
-    } catch (Exception e) {
-      throw new VippsTechnicalException(
-          "Error deserializing response of type " + responseType.getSimpleName(), e);
     }
+
+    return null;
   }
 }
