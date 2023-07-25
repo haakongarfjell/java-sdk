@@ -1,9 +1,9 @@
 package no.vippsdemo.demo;
 
-import org.springframework.http.MediaType;
+import no.vipps.VippsApi;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import no.vipps.infrastructure.VippsConfiguration;
-import no.vipps.infrastructure.VippsConfigurationOptions;
 import no.vipps.model.checkout.Amount;
 import no.vipps.model.checkout.InitiateSessionRequest;
 import no.vipps.model.checkout.InitiateSessionRequestLogistics;
@@ -27,25 +25,15 @@ import no.vipps.model.checkout.PostenLogisticsType;
 import no.vipps.model.checkout.PostnordLogisticsOption;
 import no.vipps.model.checkout.PostnordLogisticsType;
 import no.vipps.model.checkout.SessionResponse;
-import no.vipps.services.CheckoutService;
 
 @Controller
 public class CheckoutController {
 
+  @Autowired
+  private VippsApi vippsApi;
   @RequestMapping(value = "/checkout", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
   @ResponseBody
   public InitiateSessionResponse checkout(@RequestBody StartCheckoutRequest body) {
-    VippsConfigurationOptions config = VippsConfigurationOptions.builder()
-        .clientId(body.clientId)
-        .clientSecret(body.clientSecret)
-        .subscriptionKey(body.subscriptionKey)
-        .merchantSerialNumber(body.merchantSerialNumber)
-        .pluginName("Java-Sdk-Demo")
-        .pluginVersion("1.0.0")
-        .isUseTestMode(true)
-        .build();
-    VippsConfiguration.getInstance().configureVipps(config, null);
-
     String reference = UUID.randomUUID().toString();
     InitiateSessionRequest sessionInitiationRequest = InitiateSessionRequest.builder()
         .transaction(
@@ -69,13 +57,13 @@ public class CheckoutController {
             .build())
         .build();
 
-    InitiateSessionResponse sessionResponse = CheckoutService.initiateSession(sessionInitiationRequest);
+    InitiateSessionResponse sessionResponse = vippsApi.checkoutService().initiateSession(sessionInitiationRequest);
     return sessionResponse;
   }
 
   @RequestMapping("/ordercomplete")
   public String ordercomplete(@RequestParam("reference") String reference, Model model) {
-    SessionResponse sessionInfo = CheckoutService.getSessionInfo(reference);
+    SessionResponse sessionInfo = vippsApi.checkoutService().getSessionInfo(reference);
     model.addAttribute("sessionState", sessionInfo.getSessionState().toString());
     return "ordercomplete";
   }

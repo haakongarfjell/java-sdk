@@ -46,7 +46,7 @@ public class EpaymentServiceTests {
             .pluginVersion("1.0.0")
             .isUseTestMode(true)
             .build();
-    vippsApi = VippsApi.Create(config);
+    vippsApi = new VippsApi(config);
   }
 
   @Test

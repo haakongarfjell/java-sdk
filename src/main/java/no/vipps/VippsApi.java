@@ -9,34 +9,36 @@ public class VippsApi implements IVippsApi {
 
   private final VippsConfigurationOptions vippsConfigurationOptions;
   private final VippsClient vippsClient;
-
   private final AccessTokenService accessTokenService;
+  private final CheckoutService checkoutService;
+  private final EpaymentService epaymentService;
 
-  private VippsApi(VippsConfigurationOptions vippsConfigurationOptions) {
+  public VippsApi(VippsConfigurationOptions vippsConfigurationOptions) {
     this.vippsConfigurationOptions = vippsConfigurationOptions;
     vippsClient = new VippsHttpClient(vippsConfigurationOptions);
+
     accessTokenService =
         new AccessTokenService(
             new AccessTokenServiceClient(vippsClient, vippsConfigurationOptions),
             vippsConfigurationOptions);
-  }
 
-  public static VippsApi Create(VippsConfigurationOptions vippsConfigurationOptions) {
-    return new VippsApi(vippsConfigurationOptions);
+    this.checkoutService = new CheckoutService(
+            new CheckoutServiceClient(vippsClient, vippsConfigurationOptions),
+            vippsConfigurationOptions);
+
+    this.epaymentService = new EpaymentService(
+            new EpaymentServiceClient(vippsClient, accessTokenService, vippsConfigurationOptions),
+            vippsConfigurationOptions);
   }
 
   @Override
   public CheckoutService checkoutService() {
-    return new CheckoutService(
-        new CheckoutServiceClient(vippsClient, vippsConfigurationOptions),
-        vippsConfigurationOptions);
+    return this.checkoutService;
   }
 
   @Override
   public EpaymentService epaymentService() {
-    return new EpaymentService(
-        new EpaymentServiceClient(vippsClient, accessTokenService, vippsConfigurationOptions),
-        vippsConfigurationOptions);
+    return this.epaymentService;
   }
 
   @Override
