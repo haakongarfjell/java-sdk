@@ -1,54 +1,67 @@
 package no.vipps.services;
 
-import no.vipps.infrastructure.AccessTokenServiceClient;
-import no.vipps.infrastructure.VippsConfiguration;
-import no.vipps.infrastructure.VippsServices;
-import no.vipps.model.accesstoken.AccessToken;
-
 import java.util.concurrent.CompletableFuture;
+import no.vipps.helpers.UrlHelper;
+import no.vipps.infrastructure.AccessTokenServiceClient;
+import no.vipps.infrastructure.VippsConfigurationOptions;
+import no.vipps.model.accesstoken.AccessToken;
 
 public class AccessTokenService {
 
-  public static AccessToken getAccessToken() {
+  private final VippsConfigurationOptions vippsConfigurationOptions;
+
+  private final AccessTokenServiceClient accessTokenServiceClient;
+
+  public AccessTokenService(
+      AccessTokenServiceClient accessTokenServiceClient,
+      VippsConfigurationOptions vippsConfigurationOptions) {
+    this.accessTokenServiceClient = accessTokenServiceClient;
+    this.vippsConfigurationOptions = vippsConfigurationOptions;
+  }
+
+  public AccessToken getAccessToken() {
     String key =
-        VippsConfiguration.getInstance().getClientId()
-            + VippsConfiguration.getInstance().getClientSecret();
+        vippsConfigurationOptions.getClientId() + vippsConfigurationOptions.getClientSecret();
     AccessToken cachedToken = AccessTokenCacheService.get(key);
 
     if (cachedToken != null) {
       return cachedToken;
     }
 
-    String requestPath = VippsConfiguration.getInstance().getBaseUrl() + "/accesstoken/get";
+    String requestPath =
+        UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode()) + "/accesstoken/get";
     AccessToken accessToken =
-        VippsServices.getAccessTokenServiceClient()
-            .executeRequest(requestPath, "POST", "", AccessToken.class);
+        accessTokenServiceClient.executeRequest(requestPath, "POST", "", AccessToken.class);
 
     AccessTokenCacheService.put(key, accessToken);
     return accessToken;
   }
 
-  public static CompletableFuture<AccessToken> getAccessTokenAsync() {
-    String key = VippsConfiguration.getInstance().getClientId()
-        + VippsConfiguration.getInstance().getClientSecret();
+  public CompletableFuture<AccessToken> getAccessTokenAsync() {
+    String key =
+        vippsConfigurationOptions.getClientId() + vippsConfigurationOptions.getClientSecret();
 
-    return CompletableFuture
-        .supplyAsync(() -> AccessTokenCacheService.get(key))
-        .thenCompose(cachedToken -> {
-          if (cachedToken != null) {
-            return CompletableFuture.completedFuture(cachedToken);
-          }
+    return CompletableFuture.supplyAsync(() -> AccessTokenCacheService.get(key))
+        .thenCompose(
+            cachedToken -> {
+              if (cachedToken != null) {
+                return CompletableFuture.completedFuture(cachedToken);
+              }
 
-          String requestPath = VippsConfiguration.getInstance().getBaseUrl() + "/accesstoken/get";
+              String requestPath =
+                  UrlHelper.getBaseUrl(vippsConfigurationOptions.getIsUseTestMode())
+                      + "/accesstoken/get";
 
-          CompletableFuture<AccessToken> accessTokenCompletableFuture = VippsServices.getAccessTokenServiceClient()
-              .executeRequestAsync(requestPath, "POST", "", AccessToken.class);
+              CompletableFuture<AccessToken> accessTokenCompletableFuture =
+                  accessTokenServiceClient.executeRequestAsync(
+                      requestPath, "POST", "", AccessToken.class);
 
-          accessTokenCompletableFuture.thenAccept((accessToken) -> {
-            AccessTokenCacheService.put(key, accessToken);
-          });
+              accessTokenCompletableFuture.thenAccept(
+                  (accessToken) -> {
+                    AccessTokenCacheService.put(key, accessToken);
+                  });
 
-          return accessTokenCompletableFuture;
-        });
+              return accessTokenCompletableFuture;
+            });
   }
 }
