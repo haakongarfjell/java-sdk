@@ -1,6 +1,5 @@
 package no.vippsdemo.demo;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import no.vipps.IVippsApi;
 import no.vipps.VippsApi;
 import no.vipps.infrastructure.VippsConfigurationOptions;
