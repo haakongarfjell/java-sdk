@@ -17,12 +17,11 @@ public class DemoApplication {
 
   @Bean
   public VippsApi vippsApi() {
-    Dotenv dotenv = Dotenv.configure().load();
     VippsConfigurationOptions config = VippsConfigurationOptions.builder()
-            .clientId(dotenv.get("CLIENT_ID"))
-            .clientSecret(dotenv.get("CLIENT_SECRET"))
-            .subscriptionKey(dotenv.get("OCP_APIM_SUBSCRIPTION_KEY"))
-            .merchantSerialNumber(dotenv.get("MSN"))
+            .clientId(System.getenv("CLIENT_ID"))
+            .clientSecret(System.getenv("CLIENT_SECRET"))
+            .subscriptionKey(System.getenv("OCP_APIM_SUBSCRIPTION_KEY"))
+            .merchantSerialNumber(System.getenv("MSN"))
             .pluginName("Java-Sdk-Demo")
             .pluginVersion("1.0.0")
             .isUseTestMode(true)
